@@ -1,0 +1,41 @@
+{
+  "name": "surface",
+  "version": "1.0.0",
+  "description": "Package concerned with the pilot interface and dataflow on the surface side.",
+  "main": "electron-setup.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purduerov/X12-Core.git"
+  },
+  "keywords": [
+    "Surface",
+    "Pilot",
+    "Interface",
+    "Electron",
+    "React",
+    "ROV",
+    "Purdue"
+  ],
+  "author": "ROV Team, lead Nicolas Fransen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/purduerov/X12-Core/issues"
+  },
+  "homepage": "https://github.com/purduerov/X12-Core/surface#readme",
+  "dependencies": {
+    "react": "16.9.0",
+    "webpack": "^4.40.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.6.0",
+    "@babel/core": "7.6.0",
+    "@babel/preset-env": "7.6.0",
+    "@babel/preset-react": "7.0.0",
+    "babel-eslint": "10.0.3",
+    "eslint": "6.4.0",
+    "eslint-plugin-react": "7.14.3"
+  }
+}
