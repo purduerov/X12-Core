@@ -5,8 +5,8 @@
   "main": "electron-setup.js",
   "scripts": {
     "test": "npm test",
-		"start": "webpack-dev-server --open --hot --mode development",
-		"build": "webpack --mode production"
+    "start": "webpack-dev-server --open --hot --mode development",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
