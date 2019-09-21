@@ -1,3 +1,5 @@
 node_modules/
 package-lock.json
 .DS_Store
+build_w1.js
+build_w2.js

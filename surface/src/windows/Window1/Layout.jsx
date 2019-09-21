@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 
 export default class Window1Layout extends Component {
-  render() {
-    return (
-      <p>Window 1 works!</p>
-    );
-  }
+	render() {
+		return (
+			<div>
+				<Titlebar title="Purdue ROV Primary Screen" />
+			</div>
+		);
+	}
 }
