@@ -2,6 +2,6 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import Layout from './Layout.jsx';
+import Window1Layout from './Window1Layout.jsx';
 
-render(<Layout />, document.getElementById('app'));
+render(<Window1Layout />, document.getElementById('app'));

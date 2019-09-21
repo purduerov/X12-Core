@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 
-export default class Layout extends Component {
+export default class Window2Layout extends Component {
 	render() {
 		return (
 			<div>

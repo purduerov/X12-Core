@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { Component } from 'react';
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 
