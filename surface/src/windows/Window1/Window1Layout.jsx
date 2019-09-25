@@ -9,8 +9,8 @@ export default class Window1Layout extends Component {
 	render() {
 		return (
 			<div>
-				<Titlebar title='Purdue ROV Primary Screen' />
 				<Container fluid style={{padding: '0'}}>
+					<Titlebar title='Purdue ROV Primary Screen' />
 					<Row noGutters='true' style={{height: '94%'}}>
 						<Col style={{padding: '.5rem'}}>
 							<ControlColumn/>
