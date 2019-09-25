@@ -9,10 +9,10 @@ class ControlColumn extends React.Component {
 	render() {
 		return (
 			<div className='control'>
-				{this.state.text}
+				Test
 			</div>
 		);
 	}
 }
 
-export default Titlebar;
+export default ControlColumn;
