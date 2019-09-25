@@ -2,8 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { Component } from 'react';
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
-import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx'
-import {Row, Col, Container} from 'react-bootstrap'
+import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
+import {Row, Col, Container} from 'react-bootstrap';
 
 export default class Window1Layout extends Component {
 	render() {
