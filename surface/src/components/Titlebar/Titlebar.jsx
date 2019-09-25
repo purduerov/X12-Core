@@ -1,6 +1,8 @@
 import React from 'react';
-import './titlebar.css';
+import Timer from '../Timer/Timer.jsx'
 import PropTypes from 'prop-types';
+import './titlebar.css'
+import {Row, Col } from 'react-bootstrap';
 
 class Titlebar extends React.Component {
 	constructor(props) {
@@ -10,9 +12,15 @@ class Titlebar extends React.Component {
 
 	render() {
 		return (
-			<div className='title'>
-				{this.state.text}
-			</div>
+			<Row className='title'>
+				<Col className='col-align'>
+					Purdue ROV Main Screen
+				</Col>
+
+				<Col>
+					<Timer></Timer>
+				</Col>
+			</Row>
 		);
 	}
 }
