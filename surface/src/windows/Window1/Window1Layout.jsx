@@ -2,8 +2,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import React, { Component } from 'react';
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
-import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx'
-import {Row, Col, Container} from 'react-bootstrap'
+import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
+import {Row, Col, Container} from 'react-bootstrap';
+import Camera from '../../components/Camera/Camera.jsx';
 
 export default class Window1Layout extends Component {
 	render() {
@@ -14,10 +15,12 @@ export default class Window1Layout extends Component {
 					<Col style={{padding: '.5rem'}}>
 						<ControlColumn/>
 					</Col>
-					<Col xs={6} style={{}}>
+					<Col xs={6}>
 						<Row noGutters='true' style={{height: '70%', padding: '.5rem'}}>
 							<Col>
-								<ControlColumn/>
+								<ControlColumn>
+									<Camera></Camera>
+								</ControlColumn>
 							</Col>
 						</Row>
 						<Row noGutters='true' style={{height: '30%'}}>

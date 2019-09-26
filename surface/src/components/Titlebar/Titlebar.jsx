@@ -1,7 +1,7 @@
 import React from 'react';
-import Timer from '../Timer/Timer.jsx'
+import Timer from '../Timer/Timer.jsx';
 import PropTypes from 'prop-types';
-import './titlebar.css'
+import './titlebar.css';
 import {Row, Col } from 'react-bootstrap';
 
 class Titlebar extends React.Component {
