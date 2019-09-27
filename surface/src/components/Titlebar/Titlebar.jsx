@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import './titlebar.css';
 import {Row, Col } from 'react-bootstrap';
 
-class Titlebar extends React.Component {
+export default class Titlebar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { text: props.title || 'Purdue ROV 2019' };
@@ -28,5 +28,3 @@ class Titlebar extends React.Component {
 Titlebar.propTypes = {
 	title: PropTypes.string.isRequired
 };
-
-export default Titlebar;

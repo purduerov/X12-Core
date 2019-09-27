@@ -2,11 +2,12 @@
   "name": "surface",
   "version": "1.0.0",
   "description": "Package concerned with the pilot interface and dataflow on the surface side.",
-  "main": "electron-setup.js",
+  "main": "main.js",
   "scripts": {
     "test": "npm test",
     "start": "webpack-dev-server --open --hot --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "electron": "electron ."
   },
   "repository": {
     "type": "git",
@@ -29,11 +30,11 @@
   "homepage": "https://github.com/purduerov/X12-Core/surface#readme",
   "dependencies": {
     "bootstrap": "4.3.1",
-    "jquery": "^3.4.1",
+    "electron": "6.0.10",
     "react": "16.9.0",
+    "react-bootstrap": "1.0.0-beta.12",
     "react-dom": "16.9.0",
-    "webpack": "4.40.2",
-    "react-bootstrap": "1.0.0-beta.12"
+    "webpack": "4.40.2"
   },
   "devDependencies": {
     "@babel/cli": "7.6.0",
