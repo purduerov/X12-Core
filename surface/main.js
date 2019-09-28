@@ -12,7 +12,7 @@ function createWindows () {
 	windowDefinitionFiles.forEach(windowFile => {
 		
 		let window = new BrowserWindow({ width: 1600, height: 1200, webPreferences: { webSecurity: false } });
-
+		
 		window.loadURL(url.format({
 			pathname: windowFile,
 			protocol: 'file:',

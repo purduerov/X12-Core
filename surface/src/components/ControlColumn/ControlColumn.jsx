@@ -1,5 +1,5 @@
 import React from 'react';
-import './controlcolumn.css';
+import './ControlColumn.css';
 import PropTypes from 'prop-types';
 
 class ControlColumn extends React.Component {
