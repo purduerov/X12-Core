@@ -1,30 +1,31 @@
 const { app, BrowserWindow } = require('electron');
 
-const path = require('path');
-const url = require('url');
+// const path = require('path');
+// const url = require('url');
 
-const windowDefinitionFiles = [
-	path.resolve(__dirname, 'dist/Window1.html'),
-	path.resolve(__dirname, 'dist/Window2.html')
+const windowFiles = [
+	'dist/Window1.html',
+	'dist/Window2.html'
 ];
 
-function createWindows () {
-	windowDefinitionFiles.forEach(windowFile => {
-		
-		let window = new BrowserWindow({ width: 1600, height: 1200, webPreferences: { webSecurity: false } });
+let windows = [];
 
-		window.loadURL(url.format({
-			pathname: windowFile,
-			protocol: 'file:',
-			slashes: true,
-		}));
-		
-		window.on('closed', () => {
-			window = null;
-		});
+function createWindow(idx) {
+	const windowFile = windowFiles[idx];
+	// let window = new BrowserWindow({ width: 1600, height: 1200, webPreferences: { webSecurity: false } });
+	windows[idx] = new BrowserWindow({ width: 1600, height: 1200 });
 
+	windows[idx].loadFile(windowFile);
+		
+	windows[idx].on('closed', () => {
+		windows[idx] = null;
 	});
 }
+
+app.on('ready', () => {
+	createWindow(0);
+	createWindow(1);
+});
 
 app.on('window-all-closed', () => {
 	// On macOS it is common for applications and their menu bar
@@ -35,7 +36,10 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
-	// On macOS it's common to re-create a window in the app when the
-	// dock icon is clicked and there are no other windows open.
-	createWindows();
+	if (windows[0] === null){
+		createWindow(0);
+	}
+	if (windows[1] === null) {
+		createWindow(1);
+	}
 });
