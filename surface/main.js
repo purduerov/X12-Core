@@ -16,6 +16,8 @@ function createWindow(idx) {
 	windows[idx] = new BrowserWindow({ width: 1600, height: 1200 });
 
 	windows[idx].loadFile(windowFile);
+
+	windows[idx].webContents.openDevTools();
 		
 	windows[idx].on('closed', () => {
 		windows[idx] = null;
