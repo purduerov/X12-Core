@@ -11,11 +11,12 @@ const windowDefinitionFiles = [
 function createWindows () {
 	windowDefinitionFiles.forEach(windowFile => {
 		
-		let window = new BrowserWindow({ width: 1600, height: 1200 });
+		let window = new BrowserWindow({ width: 1600, height: 1200, webPreferences: { webSecurity: false } });
 
-		window.loadFile(url.format({
+		window.loadURL(url.format({
 			pathname: windowFile,
-			protocol: 'file:'
+			protocol: 'file:',
+			slashes: true,
 		}));
 		
 		window.on('closed', () => {
