@@ -1,7 +1,9 @@
-const { app, BrowserWindow } = require('electron');
+const {ipcMain, app, BrowserWindow } = require('electron');
 
 // const path = require('path');
 // const url = require('url');
+
+const CALIBRATE_CALL = 'calibrate-gamepad';
 
 const windowFiles = [
 	'dist/Window1.html',
@@ -13,7 +15,7 @@ let windows = [];
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];
 	// let window = new BrowserWindow({ width: 1600, height: 1200, webPreferences: { webSecurity: false } });
-	windows[idx] = new BrowserWindow({ width: 1600, height: 1200 });
+	windows[idx] = new BrowserWindow({ width: 1600, height: 1200, webPreferences: {webSecurity: false, nodeIntegration: true } });
 
 	windows[idx].loadFile(windowFile);
 
@@ -44,4 +46,8 @@ app.on('activate', () => {
 	if (windows[1] === null) {
 		createWindow(1);
 	}
+});
+
+ipcMain.on(CALIBRATE_CALL, (event, args) =>{
+	console.log('SHIT HAPPENED');
 });

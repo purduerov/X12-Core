@@ -2,10 +2,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
-import {Row, Col, Container} from 'react-bootstrap';
+import {Row, Col, Container, Button} from 'react-bootstrap';
 import Camera from '../../components/Camera/Camera.jsx';
+import Gamepad from '../../components/Gamepad/Gamepad.jsx';
 
 export default class Window1Layout extends Component {
+	constructor(props){
+		super(props);
+		
+	}
+
 	render() {
 		return (
 			<Container fluid style={{padding: '0'}}>
@@ -24,7 +30,9 @@ export default class Window1Layout extends Component {
 						</Row>
 						<Row noGutters='true' style={{height: '30%'}}>
 							<Col style={{padding: '.5rem'}}>
-								<ControlColumn/>
+								<ControlColumn>
+									<Gamepad></Gamepad>
+								</ControlColumn>
 							</Col>
 							<Col style={{padding: '.5rem'}}>
 								<ControlColumn/>

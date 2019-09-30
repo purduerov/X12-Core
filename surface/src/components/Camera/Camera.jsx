@@ -33,7 +33,7 @@ class Camera extends React.Component {
 				</Row>
 				<Row style={{height: '20%'}}>
 					<Col>
-						Feed 2
+						Feed 332
 					</Col>
 					<Col>
 						Feed 3

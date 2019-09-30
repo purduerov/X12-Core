@@ -12,7 +12,7 @@ export default class Titlebar extends React.Component {
 
 	render() {
 		return (
-			<Row className='title'>
+			<div className='title'>
 				<Col className='col-align'>
 					Purdue ROV Main Screen
 				</Col>
@@ -20,7 +20,7 @@ export default class Titlebar extends React.Component {
 				<Col>
 					<Timer></Timer>
 				</Col>
-			</Row>
+			</div>
 		);
 	}
 }
