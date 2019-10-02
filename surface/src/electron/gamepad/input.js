@@ -68,3 +68,4 @@ gamepad.on('down', function (controller, num) {
 	}
 });
 
+module.exports = gamepadState;

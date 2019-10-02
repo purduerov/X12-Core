@@ -6,9 +6,9 @@
   "scripts": {
     "test": "npm test",
     "start": "webpack-dev-server --open --hot --mode development",
-		"build": "webpack --mode production",
-		"webpack-watch": "webpack -w --mode development",
-		"electron-watch": "NODE_ENV=WATCH electron .",
+    "build": "webpack --mode production",
+    "webpack-watch": "webpack -w --mode development",
+    "electron-watch": "NODE_ENV=WATCH electron .",
     "electron": "electron ."
   },
   "repository": {

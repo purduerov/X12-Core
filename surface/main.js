@@ -1,6 +1,7 @@
 const {ipcMain, app, BrowserWindow } = require('electron');
 const {fork} = require('child_process');
 const path = require('path');
+const gamepad = require('./src/electron/gamepad/input');
 
 const CALIBRATE_CALL = 'calibrate-gamepad';
 if (process.env.NODE_ENV === 'WATCH') {
@@ -22,7 +23,11 @@ function createWindow(idx) {
 	windows[idx] = new BrowserWindow({
 		width: 1600,
 		height: 1200,
-		icon: path.join(__dirname + 'dist/assets/images/64X64-X11.png')
+		icon: path.join(__dirname + 'dist/assets/images/64X64-X11.png'),
+		webPreferences:{
+			webSecurity: false,
+			nodeIntegration: true
+		}
 	});
 
 	windows[idx].loadFile(windowFile);
@@ -61,4 +66,5 @@ app.on('activate', () => {
 
 ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	//Do concurrent stuff here
+	console.log(gamepad);
 });
