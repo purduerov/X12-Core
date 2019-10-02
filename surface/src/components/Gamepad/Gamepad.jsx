@@ -10,6 +10,7 @@ class Gamepad extends React.Component {
 		super(props);
 		this.state = require('../../electron/gamepad/layout.json');
 		this.calibrateClick = this.calibrateClick.bind(this);
+		let gamepad = require('../../electron/gamepad/modified');
 	}
 
 	calibrateClick(){
@@ -24,7 +25,7 @@ class Gamepad extends React.Component {
 					<Button onClick={this.calibrateClick}>Calibrate</Button>
 				</Row>
 				<Row style={{height: '70%'}}>
-					Output will go here
+					Testing
 				</Row>
 			</Col>
 		);
