@@ -1,7 +1,5 @@
 const {ipcMain, app, BrowserWindow } = require('electron');
-
-// const path = require('path');
-// const url = require('url');
+const {fork} = require('child_process');
 
 const CALIBRATE_CALL = 'calibrate-gamepad';
 
@@ -14,10 +12,12 @@ let windows = [];
 
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];
-	// let window = new BrowserWindow({ width: 1600, height: 1200, webPreferences: { webSecurity: false } });
 	windows[idx] = new BrowserWindow({ width: 1600, height: 1200, webPreferences: {webSecurity: false, nodeIntegration: true } });
 
 	windows[idx].loadFile(windowFile);
+	const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+
+    installExtension(REACT_DEVELOPER_TOOLS);
 
 	windows[idx].webContents.openDevTools();
 		
@@ -28,7 +28,7 @@ function createWindow(idx) {
 
 app.on('ready', () => {
 	createWindow(0);
-	createWindow(1);
+	//createWindow(1);
 });
 
 app.on('window-all-closed', () => {
@@ -49,5 +49,5 @@ app.on('activate', () => {
 });
 
 ipcMain.on(CALIBRATE_CALL, (event, args) =>{
-	console.log('SHIT HAPPENED');
+	//Do concurrent stuff here
 });
