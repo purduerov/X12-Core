@@ -64,12 +64,12 @@ app.on('activate', () => {
 });
 
 ipcMain.on(CALIBRATE_CALL, (event, args) =>{
-	//Do concurrent stuff here
-	// console.log(gamepad);
+	// Do concurrent stuff here
+	console.log(CALIBRATE_CALL);
 });
 
-const gamepad = spawn('node', ['src/electron/gamepad/input.js'], {
-	stdio: ['pipe', 'pipe', 'pipe', 'ipc']
+const gamepad = spawn('node', ['src/gamepad/input.js'], {
+	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
 });
 
 gamepad.on('message', (data) => {
