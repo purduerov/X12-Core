@@ -68,12 +68,11 @@ ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	// console.log(gamepad);
 });
 
-const gamepad = spawn('node', ['gamepad.js'], {
+const gamepad = spawn('node', ['src/electron/gamepad/input.js'], {
 	stdio: ['pipe', 'pipe', 'pipe', 'ipc']
 });
 
-gamepad.send('ping');
-
 gamepad.on('message', (data) => {
+	console.clear();
 	console.log(data);
 });

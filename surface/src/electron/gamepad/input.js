@@ -2,6 +2,10 @@ var gamepad = require('gamepad');
 
 let gamepadState = [];
 
+function updateParentProcess() {
+	process.send(gamepadState);
+}
+
 const DEAD_ZONE = 0.11;
 
 // Initialize the library
@@ -15,8 +19,8 @@ for (var i = 0, l = gamepad.numDevices(); i < l; i++) {
 // Create a game loop and poll for events
 setInterval(() => {
 	gamepad.processEvents();
-	console.clear();
-	console.log(gamepadState);
+	// console.clear();
+	// console.log(gamepadState);
 	// console.log(gamepadState.length);
 }, 50);
 // Scan for new gamepads as a slower rate
@@ -42,6 +46,7 @@ gamepad.on('move', function (controller, id, value) {
 	} else {
 		gamepadState.push({ id, value });
 	}
+	updateParentProcess();
 });
 
 // Listen for button up events on all gamepads
@@ -54,6 +59,7 @@ gamepad.on('up', function (controller, num) {
 	} else {
 		gamepadState.push({ id: num, value: 0 });
 	}
+	updateParentProcess();
 });
 
 // Listen for button down events on all gamepads
@@ -66,6 +72,6 @@ gamepad.on('down', function (controller, num) {
 	} else {
 		gamepadState.push({ id: num, value: 1 });
 	}
+	updateParentProcess();
 });
 
-module.exports = gamepadState;
