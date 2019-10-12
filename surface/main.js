@@ -1,6 +1,6 @@
 const {ipcMain, app, BrowserWindow } = require('electron');
 const path = require('path');
-const { spawn } = require('child_process');
+//const gamepad = require('./src/electron/gamepad/input');
 
 const CALIBRATE_CALL = 'calibrate-gamepad';
 if (process.env.NODE_ENV === 'WATCH') {
