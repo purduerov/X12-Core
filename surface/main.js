@@ -1,7 +1,6 @@
 const {ipcMain, app, BrowserWindow } = require('electron');
-const {fork} = require('child_process');
 const path = require('path');
-const gamepad = require('./src/electron/gamepad/input');
+const { spawn } = require('child_process');
 
 const CALIBRATE_CALL = 'calibrate-gamepad';
 if (process.env.NODE_ENV === 'WATCH') {
@@ -33,7 +32,7 @@ function createWindow(idx) {
 	windows[idx].loadFile(windowFile);
 	const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
-    installExtension(REACT_DEVELOPER_TOOLS);
+	installExtension(REACT_DEVELOPER_TOOLS);
 
 	windows[idx].webContents.openDevTools();
 		
@@ -65,6 +64,15 @@ app.on('activate', () => {
 });
 
 ipcMain.on(CALIBRATE_CALL, (event, args) =>{
-	//Do concurrent stuff here
-	console.log(gamepad);
+	// Do concurrent stuff here
+	console.log(CALIBRATE_CALL);
+});
+
+const gamepad = spawn('node', ['src/gamepad/input.js'], {
+	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
+});
+
+gamepad.on('message', (data) => {
+	console.clear();
+	console.log(data);
 });
