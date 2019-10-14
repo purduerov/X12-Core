@@ -2,15 +2,12 @@ import React from 'react';
 import './Gamepad.css';
 import { Button, Row, Col } from 'react-bootstrap';
 import {ipcRenderer} from 'electron';
-
-const CALIBRATE_CALL = 'calibrate-gamepad';
+import { CALIBRATE_CALL } from '../../constants';
 
 class Gamepad extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = require('../../gamepad/layout.json');
 		this.calibrateClick = this.calibrateClick.bind(this);
-		let gamepad = require('../../gamepad/modified.js');
 	}
 
 	calibrateClick(){

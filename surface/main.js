@@ -1,8 +1,9 @@
-const {ipcMain, app, BrowserWindow } = require('electron');
+const { ipcMain, app, BrowserWindow } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 
-const CALIBRATE_CALL = 'calibrate-gamepad';
+const { CALIBRATE_CALL, STORE_UPDATED } = require('./src/constants');
+
 if (process.env.NODE_ENV === 'WATCH') {
 	require('electron-reload')(
 		path.join(__dirname, './dist' ),
@@ -72,7 +73,21 @@ const gamepad = spawn('node', ['src/gamepad/input.js'], {
 	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
 });
 
-gamepad.on('message', (data) => {
+gamepad.on('message', data => {
 	console.clear();
 	console.log(data);
+});
+
+const store = require('./src/store');
+
+const sampleEmitter = spawn('node', ['src/gamepad/sample-emitter.js'], {
+	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
+});
+
+sampleEmitter.on('message', data => {
+	store.updateGamepad(data);
+});
+
+store.on(STORE_UPDATED, newStore => {
+	windows[0].webContents.send(STORE_UPDATED, newStore);
 });
