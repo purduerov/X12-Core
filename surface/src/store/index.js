@@ -31,7 +31,7 @@ class Store extends EventEmitter {
 	}
 
 	validateStore() {
-		return storeSchema.isValid(this.data);
+		return storeSchema.validate(this.data);
 	}
 
 	updateGamepad(newGamepad) {
