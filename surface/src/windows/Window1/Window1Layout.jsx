@@ -1,15 +1,24 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, { Component } from 'react';
+import { ipcRenderer } from 'electron';
+
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
 import {Row, Col, Container, Button} from 'react-bootstrap';
 import Camera from '../../components/Camera/Camera.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
 
+import defaultStore from '../../store/defaults.json';
+import { STORE_UPDATED } from '../../constants';
+
+
 export default class Window1Layout extends Component {
 	constructor(props){
 		super(props);
-		
+		this.state = defaultStore;
+		ipcRenderer.on(STORE_UPDATED, (event, newStore) => {
+			this.setState(newStore);
+		});
 	}
 
 	render() {
@@ -35,7 +44,9 @@ export default class Window1Layout extends Component {
 								</ControlColumn>
 							</Col>
 							<Col style={{padding: '.5rem'}}>
-								<ControlColumn/>
+								<ControlColumn>
+									{`GamepadSampleData ${this.state.gamepad.sampleData}`}
+								</ControlColumn>
 							</Col>
 						</Row>
 					</Col>
