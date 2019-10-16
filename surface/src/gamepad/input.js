@@ -4,8 +4,6 @@ let gamepadState = [];
 
 console.log('Gamepad Process Started...');
 
-process.send(gamepadState);
-
 function updateParentProcess() {
 	process.send(gamepadState);
 }
@@ -15,20 +13,13 @@ const DEAD_ZONE = 0.11;
 // Initialize the library
 gamepad.init();
 
-// List the state of all currently attached devices
-for (var i = 0, l = gamepad.numDevices(); i < l; i++) {
-	console.log(i, gamepad.deviceAtIndex());
-}
-
 // Create a game loop and poll for events
 setInterval(() => {
 	gamepad.processEvents();
-	// console.clear();
-	// console.log(gamepadState);
+	//console.clear();
+	//console.log(gamepadState);
 	// console.log(gamepadState.length);
 }, 50);
-// Scan for new gamepads as a slower rate
-//setInterval(gamepad.detectDevices, 500);
 
 function compare(a, b) {
 	return a.id - b.id;

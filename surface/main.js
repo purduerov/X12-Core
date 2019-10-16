@@ -2,7 +2,7 @@ const { ipcMain, app, BrowserWindow } = require('electron');
 const path = require('path');
 const {spawn} = require('child_process');
 
-const { CALIBRATE_CALL, STORE_UPDATED } = require('./src/constants');
+const { CALIBRATE_CALL, STORE_UPDATED , CALIBRATE_RECEIVE} = require('./src/constants');
 
 if (process.env.NODE_ENV === 'WATCH') {
 	require('electron-reload')(
@@ -64,9 +64,12 @@ app.on('activate', () => {
 	}
 });
 
+calibrating = false;
+
 ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	// Do concurrent stuff here
 	event.sender.send(CALIBRATE_RECEIVE, 'Calibration Started...');
+	calibrating = true;
 });
 
 const gamepad = spawn('node', ['src/gamepad/input.js'], {
@@ -79,8 +82,9 @@ gamepad.stdout.on('data', (data) => {
 
 
 gamepad.on('message', (data) => {
-	//console.clear();
-	console.log(data);
+	if(calibrating){
+		
+	}
 });
 
 const store = require('./src/store');

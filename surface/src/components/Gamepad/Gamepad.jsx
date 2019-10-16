@@ -2,16 +2,20 @@ import React from 'react';
 import './Gamepad.css';
 import { Button, Row, Col } from 'react-bootstrap';
 import {ipcRenderer} from 'electron';
-import { CALIBRATE_CALL } from '../../constants';
+import { CALIBRATE_CALL, CALIBRATE_RECEIVE } from '../../constants';
 
 class Gamepad extends React.Component {
 	constructor(props) {
 		super(props);
 		this.calibrateClick = this.calibrateClick.bind(this);
-		this.state.message = 'Hello';
+		this.state = {
+			message: 'Hello',
+			calibrating: false
+		}
 
 		ipcRenderer.on(CALIBRATE_RECEIVE, (event, args) => {
 			this.setState({message: args});
+			if(args == 'Calibration Started...') this.setState({calibrating: true});
 		});
 	}
 
