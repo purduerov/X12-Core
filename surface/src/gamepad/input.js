@@ -2,6 +2,10 @@ var gamepad = require('gamepad');
 
 let gamepadState = [];
 
+console.log('Gamepad Process Started...');
+
+process.send(gamepadState);
+
 function updateParentProcess() {
 	process.send(gamepadState);
 }

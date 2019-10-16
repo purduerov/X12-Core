@@ -1,8 +1,12 @@
-const {ipcMain, app, BrowserWindow } = require('electron');
+const {ipcMain, ipcRenderer, app, BrowserWindow } = require('electron');
 const path = require('path');
+const {spawn} = require('child_process');
+
 //const gamepad = require('./src/electron/gamepad/input');
 
 const CALIBRATE_CALL = 'calibrate-gamepad';
+const CALIBRATE_RECEIVE = 'calibrate-receive';
+
 if (process.env.NODE_ENV === 'WATCH') {
 	require('electron-reload')(
 		path.join(__dirname, './dist' ),
@@ -65,14 +69,38 @@ app.on('activate', () => {
 
 ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	// Do concurrent stuff here
-	console.log(CALIBRATE_CALL);
+	event.sender.send(CALIBRATE_RECEIVE, 'Calibration Started...');
 });
 
 const gamepad = spawn('node', ['src/gamepad/input.js'], {
-	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
+	stdio: ['ignore', 'pipe', 'ignore', 'ipc']
 });
 
+gamepad.stdout.on('data', (data) => {
+	windows[0].webContents.send(CALIBRATE_RECEIVE, `${data}`);
+});
+
+
 gamepad.on('message', (data) => {
-	console.clear();
+	//console.clear();
 	console.log(data);
 });
+
+/*
+OUR CODE
+
+░░░░░░░░░░▀▀▀██████▄▄▄░░░░░░░░░░ 
+░░░░░░░░░░░░░░░░░▀▀▀████▄░░░░░░░ 
+░░░░░░░░░░▄███████▀░░░▀███▄░░░░░ 
+░░░░░░░░▄███████▀░░░░░░░▀███▄░░░ 
+░░░░░░▄████████░░░░░░░░░░░███▄░░ 
+░░░░░██████████▄░░░░░░░░░░░███▌░ 
+░░░░░▀█████▀░▀███▄░░░░░░░░░▐███░ 
+░░░░░░░▀█▀░░░░░▀███▄░░░░░░░▐███░ 
+░░░░░░░░░░░░░░░░░▀███▄░░░░░███▌░ 
+░░░░▄██▄░░░░░░░░░░░▀███▄░░▐███░░ 
+░░▄██████▄░░░░░░░░░░░▀███▄███░░░ 
+░█████▀▀████▄▄░░░░░░░░▄█████░░░░ 
+░████▀░░░▀▀█████▄▄▄▄█████████▄░░ 
+░░▀▀░░░░░░░░░▀▀██████▀▀░░░▀▀██░░
+*/
