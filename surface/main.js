@@ -1,15 +1,11 @@
 const { ipcMain, app, BrowserWindow } = require('electron');
+const contextMenu = require('electron-context-menu');
+const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+
 const path = require('path');
 const { spawn } = require('child_process');
 
 const { CALIBRATE_CALL, STORE_UPDATED } = require('./src/constants');
-
-if (process.env.NODE_ENV === 'WATCH') {
-	require('electron-reload')(
-		path.join(__dirname, './dist' ),
-		{ electron : path.join(__dirname, 'node_modules', '.bin', 'electron')}
-	);
-}
 
 const windowFiles = [
 	'dist/Window1.html',
@@ -31,7 +27,6 @@ function createWindow(idx) {
 	});
 
 	windows[idx].loadFile(windowFile);
-	const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
 
 	installExtension(REACT_DEVELOPER_TOOLS);
 
@@ -41,6 +36,25 @@ function createWindow(idx) {
 		windows[idx] = null;
 	});
 }
+
+// Conditionally enable electron-reload capability
+if (process.env.NODE_ENV === 'WATCH') {
+	require('electron-reload')(
+		path.join(__dirname, './dist' ),
+		{ electron : path.join(__dirname, 'node_modules', '.bin', 'electron')}
+	);
+}
+
+// ----------------------------------------------------------------------------------------
+// Importing this adds a right-click menu with 'Inspect Element' option [worth it]
+contextMenu({
+	prepend: (params, browserWindow) => [{
+		label: 'Rainbow',
+		// Only show it when right-clicking images
+		visible: params.mediaType === 'image',
+	}],
+});
+// ----------------------------------------------------------------------------------------
 
 app.on('ready', () => {
 	createWindow(0);
