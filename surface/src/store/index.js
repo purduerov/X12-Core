@@ -41,6 +41,14 @@ class Store extends EventEmitter {
 
 		this.storeUpdated();
 	}
+
+	updateGamepadState(newState){
+		this.updatingStore();
+
+		this.data.gamepad.state = newState;
+
+		this.storeUpdated();
+	}
 }
 
 module.exports = new Store();

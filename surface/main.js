@@ -68,10 +68,24 @@ app.on('ready', () => {
 
 	sampleEmitter.on('message', data => {
 		store.updateGamepad(data);
+
 	});
 
 	store.on(STORE_UPDATED, newStore => {
 		windows[0].webContents.send(STORE_UPDATED, newStore);
+	});
+
+	const gamepad = spawn('node', ['src/gamepad/index.js'], {
+		stdio: ['ignore', 'pipe', 'ignore', 'ipc']
+	});
+	
+	gamepad.stdout.on('data', (data) => {
+		//windows[0].webContents.send(CALIBRATE_RECEIVE, `${data}`);
+		console.log(`${data}`);
+	});
+	
+	gamepad.on('message', (data) => {
+		store.updateGamepadState(data);
 	});
 });
 
@@ -100,19 +114,7 @@ ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	calibrating = true;
 });
 
-const gamepad = spawn('node', ['src/gamepad/index.js'], {
-	stdio: ['ignore', 'pipe', 'ignore', 'ipc']
-});
 
-gamepad.stdout.on('data', (data) => {
-	//windows[0].webContents.send(CALIBRATE_RECEIVE, `${data}`);
-	console.log(`${data}`);
-});
-
-
-gamepad.on('message', (data) => {
-	console.log(CALIBRATE_CALL);
-});
 
 /*
 OUR CODE
