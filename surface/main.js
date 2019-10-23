@@ -83,7 +83,7 @@ ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	console.log(CALIBRATE_CALL);
 });
 
-const gamepad = spawn('node', ['src/gamepad/input.js'], {
+const gamepad = spawn('node', ['src/gamepad'], {
 	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
 });
 
