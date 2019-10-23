@@ -5,7 +5,7 @@ const gamepadSchema = yup.object().shape({
 });
 
 const storeSchema = yup.object().shape({
-	gamepadSchema
+	gamepad: gamepadSchema
 });
 
 module.exports = storeSchema;

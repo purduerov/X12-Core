@@ -29,15 +29,16 @@ class Camera extends React.Component {
 		return (
 			<Container>
 				<Row style={{height: '80%'}}>
-					Feed 1
+					<iframe src="http://192.168.1.3:8090/test.mjpg" frameBorder="0" height="100%" width="100%"></iframe>
 				</Row>
 				<Row style={{height: '20%'}}>
 					<Col>
-						Feed 332
+						<iframe src="http://192.168.1.3:8090/test2.mjpg" frameBorder="0" height="100%" width="100%"></iframe>
 					</Col>
 					<Col>
 						Feed 3
 					</Col>
+					
 					<Col>
 						Feed 4
 					</Col>
@@ -49,5 +50,7 @@ class Camera extends React.Component {
 		);
 	}
 }
+
+//ffserver
 
 export default Camera;
