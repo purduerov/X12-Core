@@ -1,5 +1,6 @@
 {
 	"gamepad": {
-		"sampleData": null
+		"sampleData": null,
+		"calibrating": false
 	}
 }

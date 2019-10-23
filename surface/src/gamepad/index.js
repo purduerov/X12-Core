@@ -19,13 +19,15 @@ const DOWN = 1;
 // Set Calibration Mode 
 const CALIBRATION = false;
 
+gamepad.init();
+
 let other = {
-	'calibration': false
+	'attached': gamepad.deviceAtIndex()
 }
 let gamepadState = _.assign(layout.continuous, layout.binary, other);
 gamepadState = _.mapValues(gamepadState, () => 0);
 
-console.log(gamepadState);
+process.send(gamepadState); //send once to see if attached
 
 let calibrationState = {
 	binary: [],
@@ -46,12 +48,13 @@ function compare(a, b) {
 	return a.id - b.id;
 }
 
-gamepad.init();
-
 setInterval(() => gamepad.processEvents(), INTERVAL);
 
 // Scan for new devices, for example a disconnect happened
-setInterval(() => gamepad.detectDevices(), 1500);
+setInterval(() => {
+	gamepad.detectDevices();
+	gamepadState['attached'] = gamepad.deviceAtIndex();
+}, 1500);
 
 
 gamepad.on('move', function (controller, id, value) {

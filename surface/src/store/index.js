@@ -2,7 +2,7 @@ const EventEmitter = require('events');
 const _ = require('lodash');
 
 const storeSchema = require('./store-schema.js');
-const { STORE_UPDATED } = require('../constants');
+const { STORE_UPDATED, GAMEPAD_STATE_UPDATED } = require('../constants');
 const defaults = require('./defaults.json');
 
 class Store extends EventEmitter {
@@ -11,6 +11,7 @@ class Store extends EventEmitter {
 		this.data = defaults;
 
 		this.updateGamepad = this.updateGamepad.bind(this);
+		this.updateGamepadState = this.updateGamepadState.bind(this);
 	}
 
 	updatingStore() {
@@ -30,6 +31,19 @@ class Store extends EventEmitter {
 		}			
 	}
 
+	async gamepadUpdated(){
+		try {
+			const yup = await this.validateStore(this.data);
+			if (!yup) throw yup;
+
+			this.emit(GAMEPAD_STATE_UPDATED, this.data);
+			
+		} catch (err) {
+			console.error(err);
+			this.data = _.cloneDeep(this.olddata);
+		}	
+	}
+
 	validateStore() {
 		return storeSchema.validate(this.data);
 	}
@@ -47,7 +61,7 @@ class Store extends EventEmitter {
 
 		this.data.gamepad.state = newState;
 
-		this.storeUpdated();
+		this.gamepadUpdated();
 	}
 }
 

@@ -5,7 +5,7 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 const path = require('path');
 const {spawn} = require('child_process');
 
-const { CALIBRATE_CALL, STORE_UPDATED , CALIBRATE_RECEIVE} = require('./src/constants');
+const { CALIBRATE_CALL, STORE_UPDATED , CALIBRATE_RECEIVE, GAMEPAD_STATE_UPDATED} = require('./src/constants');
 
 const windowFiles = [
 	'dist/Window1.html',
@@ -13,6 +13,8 @@ const windowFiles = [
 ];
 
 let windows = [];
+let calIdx = 0;
+let iterableLayout = [];
 
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];
@@ -62,6 +64,8 @@ app.on('ready', () => {
 
 	const store = require('./src/store');
 
+
+
 	const sampleEmitter = spawn('node', ['src/gamepad/sample-emitter.js'], {
 		stdio: ['ignore', 'ignore', 'ignore', 'ipc']
 	});
@@ -75,6 +79,13 @@ app.on('ready', () => {
 		windows[0].webContents.send(STORE_UPDATED, newStore);
 	});
 
+	store.on(GAMEPAD_STATE_UPDATED, newStore => {
+		windows[0].webContents.send(GAMEPAD_STATE_UPDATED, newStore);
+		if(newStore.gamepad.calibrating){
+			
+		}
+	});
+
 	const gamepad = spawn('node', ['src/gamepad/index.js'], {
 		stdio: ['ignore', 'pipe', 'ignore', 'ipc']
 	});
@@ -85,7 +96,22 @@ app.on('ready', () => {
 	});
 	
 	gamepad.on('message', (data) => {
+		console.log(`${data}`);
 		store.updateGamepadState(data);
+	});
+
+	ipcMain.on(CALIBRATE_CALL, (event, args) =>{
+		// Do concurrent stuff here
+		event.sender.send(CALIBRATE_RECEIVE, 'Calibrating controller...');
+		store.data.gamepad.calibrating = true;
+		calIdx = 0;
+		console.log('state' + JSON.stringify(store.data.gamepad));
+		if(store.data.gamepad.state.attached){
+			iterableLayout = Object.keys(store.data.gamepad).map(function(key) {
+				return (String(key), obj[key]);
+			});
+		}		
+		console.log(iterableLayout);
 	});
 });
 
@@ -104,14 +130,6 @@ app.on('activate', () => {
 	if (windows[1] === null) {
 		createWindow(1);
 	}
-});
-
-calibrating = false;
-
-ipcMain.on(CALIBRATE_CALL, (event, args) =>{
-	// Do concurrent stuff here
-	event.sender.send(CALIBRATE_RECEIVE, 'Calibration Started...');
-	calibrating = true;
 });
 
 

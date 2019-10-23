@@ -10,12 +10,13 @@ class Gamepad extends React.Component {
 		this.calibrateClick = this.calibrateClick.bind(this);
 		this.state = {
 			message: 'something',
+			status: 'Booting...',
 			calibrating: false
 		}
 
 		ipcRenderer.on(CALIBRATE_RECEIVE, (event, args) => {
-			this.setState({message: args});
-			if(args == 'Calibration Started...') this.setState({calibrating: true});
+			this.setState({status: args});
+			if(args == 'Calibrating controller...') this.setState({calibrating: true});
 		});
 
 		ipcRenderer.on(STORE_UPDATED, (event, args) =>{
@@ -36,7 +37,10 @@ class Gamepad extends React.Component {
 				<Row style={{height: '10%'}}>
 					<Button onClick={this.calibrateClick}>Calibrate</Button>
 				</Row>
-				<Row style={{height: '90%', paddingTop: '1rem', overflowWrap: 'break-word'}}>
+				<Row style={{height: '10%', paddingTop: '1rem'}}>
+					Status: {this.state.status}
+				</Row>
+				<Row style={{height: '80%', paddingTop: '1rem', overflowWrap: 'break-word'}}>
 					{this.state.message}
 				</Row>
 			</Col>
