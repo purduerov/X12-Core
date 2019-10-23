@@ -59,6 +59,20 @@ contextMenu({
 app.on('ready', () => {
 	createWindow(0);
 	//createWindow(1);
+
+	const store = require('./src/store');
+
+	const sampleEmitter = spawn('node', ['src/gamepad/sample-emitter.js'], {
+		stdio: ['ignore', 'ignore', 'ignore', 'ipc']
+	});
+
+	sampleEmitter.on('message', data => {
+		store.updateGamepad(data);
+	});
+
+	store.on(STORE_UPDATED, newStore => {
+		windows[0].webContents.send(STORE_UPDATED, newStore);
+	});
 });
 
 app.on('window-all-closed', () => {
@@ -86,33 +100,18 @@ ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 	calibrating = true;
 });
 
-const gamepad = spawn('node', ['src/gamepad/input.js'], {
+const gamepad = spawn('node', ['src/gamepad/index.js'], {
 	stdio: ['ignore', 'pipe', 'ignore', 'ipc']
 });
 
 gamepad.stdout.on('data', (data) => {
-	windows[0].webContents.send(CALIBRATE_RECEIVE, `${data}`);
+	//windows[0].webContents.send(CALIBRATE_RECEIVE, `${data}`);
+	console.log(`${data}`);
 });
 
 
 gamepad.on('message', (data) => {
-	if(calibrating){
-		
-	}
-});
-
-const store = require('./src/store');
-
-const sampleEmitter = spawn('node', ['src/gamepad/sample-emitter.js'], {
-	stdio: ['ignore', 'ignore', 'ignore', 'ipc']
-});
-
-sampleEmitter.on('message', data => {
-	store.updateGamepad(data);
-});
-
-store.on(STORE_UPDATED, newStore => {
-	windows[0].webContents.send(STORE_UPDATED, newStore);
+	console.log(CALIBRATE_CALL);
 });
 
 /*

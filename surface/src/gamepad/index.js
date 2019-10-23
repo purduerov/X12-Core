@@ -19,9 +19,13 @@ const DOWN = 1;
 // Set Calibration Mode 
 const CALIBRATION = false;
 
-
-let gamepadState = _.assign(layout.continuous, layout.binary);
+let other = {
+	'calibration': false
+}
+let gamepadState = _.assign(layout.continuous, layout.binary, other);
 gamepadState = _.mapValues(gamepadState, () => 0);
+
+console.log(gamepadState);
 
 let calibrationState = {
 	binary: [],
