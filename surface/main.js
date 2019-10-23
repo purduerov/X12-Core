@@ -96,7 +96,6 @@ app.on('ready', () => {
 	});
 	
 	gamepad.on('message', (data) => {
-		console.log(`${data}`);
 		store.updateGamepadState(data);
 	});
 
@@ -105,7 +104,6 @@ app.on('ready', () => {
 		event.sender.send(CALIBRATE_RECEIVE, 'Calibrating controller...');
 		store.data.gamepad.calibrating = true;
 		calIdx = 0;
-		console.log('state' + JSON.stringify(store.data.gamepad));
 		if(store.data.gamepad.state.attached){
 			iterableLayout = Object.keys(store.data.gamepad).map(function(key) {
 				return (String(key), obj[key]);

@@ -34,15 +34,15 @@ class Gamepad extends React.Component {
 	render() {
 		return (
 			<Col>
-				<Row style={{height: '10%'}}>
+				<Row style={{height: '20%'}}>
 					<Button onClick={this.calibrateClick}>Calibrate</Button>
 				</Row>
-				<Row style={{height: '10%', paddingTop: '1rem'}}>
+				<Row style={{height: '20%'}}>
 					Status: {this.state.status}
 				</Row>
-				<Row style={{height: '80%', paddingTop: '1rem', overflowWrap: 'break-word'}}>
+				<div className='text-area' style={{height: '60%', overflowWrap: 'break-word'}}>
 					{this.state.message}
-				</Row>
+				</div>
 			</Col>
 		);
 	}

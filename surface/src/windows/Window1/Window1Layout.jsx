@@ -38,12 +38,12 @@ export default class Window1Layout extends Component {
 							</Col>
 						</Row>
 						<Row noGutters='true' style={{height: '30%'}}>
-							<Col style={{padding: '.5rem'}}>
+							<Col style={{padding: '.5rem', maxWidth: '50%'}}>
 								<ControlColumn>
 									<Gamepad></Gamepad>
 								</ControlColumn>
 							</Col>
-							<Col style={{padding: '.5rem'}}>
+							<Col style={{padding: '.5rem', maxWidth: '50%'}}>
 								<ControlColumn>
 									{`GamepadSampleData ${this.state.gamepad.sampleData}`}
 								</ControlColumn>
