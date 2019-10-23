@@ -7,6 +7,8 @@ const {spawn} = require('child_process');
 
 const { CALIBRATE_CALL, STORE_UPDATED , CALIBRATE_RECEIVE, GAMEPAD_STATE_UPDATED} = require('./src/constants');
 
+const layout = require('./src/gamepad/layout.js');
+
 const windowFiles = [
 	'dist/Window1.html',
 	'dist/Window2.html'
@@ -82,7 +84,8 @@ app.on('ready', () => {
 	store.on(GAMEPAD_STATE_UPDATED, newStore => {
 		windows[0].webContents.send(GAMEPAD_STATE_UPDATED, newStore);
 		if(newStore.gamepad.calibrating){
-			
+			windows[0].webContents.send(CALIBRATE_RECEIVE, 'Press: ' + iterableLayout[calIdx][0]);
+			calIdx += 1;
 		}
 	});
 
@@ -101,15 +104,23 @@ app.on('ready', () => {
 
 	ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 		// Do concurrent stuff here
-		event.sender.send(CALIBRATE_RECEIVE, 'Calibrating controller...');
+		event.sender.send(CALIBRATE_RECEIVE, '');
 		store.data.gamepad.calibrating = true;
 		calIdx = 0;
 		if(store.data.gamepad.state.attached){
-			iterableLayout = Object.keys(store.data.gamepad).map(function(key) {
-				return (String(key), obj[key]);
+			iterableLayout = Object.keys(layout.binary).map(function(key) {
+				return [key, layout.binary[key]];
 			});
-		}		
-		console.log(iterableLayout);
+			let part2 = Object.keys(layout.continuous).map(function(key) {
+				return [key, layout.continuous[key]];
+			});
+			part2.forEach((item) => iterableLayout.push(item)); //for some reason iterableLayout.concat(part2) does not work. Thank you, Java very cool
+			event.sender.send(CALIBRATE_RECEIVE, 'Press: ' + iterableLayout[calIdx][0]);
+			calIdx += 1;
+		}else{
+			event.sender.send(CALIBRATE_RECEIVE, 'No controller attached...');
+		}
+		
 	});
 });
 
