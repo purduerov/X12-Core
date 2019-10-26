@@ -5,9 +5,9 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 const path = require('path');
 const {spawn} = require('child_process');
 
-const { CALIBRATE_CALL, STORE_UPDATED , CALIBRATE_RECEIVE, GAMEPAD_STATE_UPDATED} = require('./src/constants');
+const fs = require('fs');
 
-const layout = require('./src/gamepad/layout.js');
+const { CALIBRATE_CALL, STORE_UPDATED , CALIBRATE_RECEIVE, GAMEPAD_STATE_UPDATED} = require('./src/constants');
 
 const windowFiles = [
 	'dist/Window1.html',
@@ -16,7 +16,13 @@ const windowFiles = [
 
 let windows = [];
 let calIdx = 0;
-let iterableLayout = [];
+let iterableLayout = require('./src/gamepad/buttons.json');
+let lastClick = null;
+let clickCount = 0;
+let newLayout = {
+	binary: {},
+	continuous:{}
+}
 
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];
@@ -84,8 +90,37 @@ app.on('ready', () => {
 	store.on(GAMEPAD_STATE_UPDATED, newStore => {
 		windows[0].webContents.send(GAMEPAD_STATE_UPDATED, newStore);
 		if(newStore.gamepad.calibrating){
-			windows[0].webContents.send(CALIBRATE_RECEIVE, 'Press: ' + iterableLayout[calIdx][0]);
+			let lA = store.data.gamepad.state.lastAction;
+			if(lA == lastClick && store.data.gamepad.state.isBinary){
+				clickCount++;
+			}else clickCount = 0;
+
+			//Set layout
+			if(store.data.gamepad.state.isBinary){
+				lastClick = lA; //Prevent double register
+				store.data.gamepad.state.isBinary = false;
+				if(clickCount == 1)
+					newLayout.binary[iterableLayout[calIdx]] = lA;
+				else if(clickCount > 3)
+					newLayout.binary[iterableLayout[calIdx]] = lA;
+				else return;
+			}else{
+				if(store.data.gamepad.state.ctInput && lastClick != lA){
+					lastClick = lA; //Prevent double register
+					newLayout.continuous[iterableLayout[calIdx]] = lA;
+				}else return;
+			}
+
+			//Next calibration
 			calIdx += 1;
+			if(calIdx < iterableLayout.length)
+				windows[0].webContents.send(CALIBRATE_RECEIVE, 'Press: ' + iterableLayout[calIdx]);
+			else{
+				store.data.gamepad.calibrating = false;
+				windows[0].webContents.send(CALIBRATE_RECEIVE, 'Calibration Done!');
+				let js = JSON.stringify(newLayout);
+				fs.writeFileSync('./src/gamepad/layout.json', js);
+			}
 		}
 	});
 
@@ -104,19 +139,11 @@ app.on('ready', () => {
 
 	ipcMain.on(CALIBRATE_CALL, (event, args) =>{
 		// Do concurrent stuff here
-		event.sender.send(CALIBRATE_RECEIVE, '');
 		store.data.gamepad.calibrating = true;
+		lastClick = null;
 		calIdx = 0;
 		if(store.data.gamepad.state.attached){
-			iterableLayout = Object.keys(layout.binary).map(function(key) {
-				return [key, layout.binary[key]];
-			});
-			let part2 = Object.keys(layout.continuous).map(function(key) {
-				return [key, layout.continuous[key]];
-			});
-			part2.forEach((item) => iterableLayout.push(item)); //for some reason iterableLayout.concat(part2) does not work. Thank you, Java very cool
-			event.sender.send(CALIBRATE_RECEIVE, 'Press: ' + iterableLayout[calIdx][0]);
-			calIdx += 1;
+			event.sender.send(CALIBRATE_RECEIVE, 'Press: ' + iterableLayout[calIdx]);
 		}else{
 			event.sender.send(CALIBRATE_RECEIVE, 'No controller attached...');
 		}

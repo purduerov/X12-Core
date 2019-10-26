@@ -1,7 +1,7 @@
 const gamepad = require('gamepad');
 const _ = require('lodash');
 
-const layout = require('./layout.js');
+const layout = require('./layout.json');
 
 // Range beneath which raw values are excluded to remove
 // 	 noise and unintended motions
@@ -22,7 +22,10 @@ const CALIBRATION = false;
 gamepad.init();
 
 let other = {
-	'attached': false
+	'attached': false,
+	'lastAction': null,
+	'ctInput': false,
+	'isBinary': false
 }
 let gamepadState = _.assign(layout.continuous, layout.binary, other);
 gamepadState = _.mapValues(gamepadState, () => 0);
@@ -62,77 +65,47 @@ setInterval(() => {
 
 
 gamepad.on('move', function (controller, id, value) {
-	if (CALIBRATION) {
-		const existingIdx = calibrationState.continuous.findIndex(axis => axis.id === id);
-		if (existingIdx > -1) {
-			calibrationState.continuous[existingIdx].value = value;
-		} else {
-			calibrationState.continuous.push({ id, value });
-			calibrationState.continuous.sort(compare);
-		}
-		gamepadUpdated();
+	
+	let cor = correctRaw(value);
+	if(Math.abs(cor) > 0.75){
+		gamepadState.isBinary = false;
+		gamepadState.ctInput = true;
+		gamepadState.lastAction = id;
+	} else gamepadState.ctInput = false;
 
-	} else {
-		try {
-			const key = _.findKey(layout.continuous, val => val == id);
-			gamepadState[key] = correctRaw(value);
-		
-			gamepadUpdated();
-			
-		} catch(err) {
-			console.error(err);
-		}
-	}
+	try {
+		const key = _.findKey(layout.continuous, val => val == id);
+		gamepadState[key] = cor;	
+	} catch(err) {console.error(err);}
 
+	gamepadUpdated();
 });
 
 
 gamepad.on('up', function (controller, id) {
-	if (CALIBRATION) {
-		const existingIdx = calibrationState.binary.findIndex(axis => axis.id === id);
-		if (existingIdx > -1) {
-			calibrationState.binary[existingIdx].value = UP;
-		} else {
-			calibrationState.binary.push({ id, value: UP });
-			calibrationState.binary.sort(compare);
-		}
-		gamepadUpdated();
+	try {
+		const key = _.findKey(layout.binary, val => val == id);
+		gamepadState[key] = UP;
+		gamepadState.isBinary = false;
 
-	} else {
-		try {
-			const key = _.findKey(layout.binary, val => val == id);
-			gamepadState[key] = UP;
+		gamepadUpdated();
 	
-			gamepadUpdated();
-		
-		} catch(err) {
-			console.error(err);
-		}
-	}
+	} catch(err) {console.error(err);}
 });
 
 gamepad.on('down', function (controller, id) {
-	if (CALIBRATION) {
-		const existingIdx = calibrationState.binary.findIndex(axis => axis.id === id);
-		if (existingIdx > -1) {
-			calibrationState.binary[existingIdx].value = DOWN;
-		} else {
-			calibrationState.binary.push({ id, value: DOWN });
-			calibrationState.binary.sort(compare);
-		}
-		gamepadUpdated();
 
-	} else {
-		try {
-			const key = _.findKey(layout.binary, val => val == id);
-			gamepadState[key] = DOWN;
-	
-			gamepadUpdated();
-		
-		} catch(err) {
-			console.error(err);
-		}
-	}
+	gamepadState.lastAction = id;
+	gamepadState.isBinary = true;
+
+	console.log(id);
+
+	try {
+		const key = _.findKey(layout.binary, val => val == id);
+		gamepadState[key] = DOWN;
+	} catch(err) {console.error(err);}
+
+	gamepadUpdated();
 });
 
 
@@ -140,6 +113,7 @@ function correctRaw(value) {
 	// Separate sign from value
 	const sign = value < 0 ? -1 : 1;
 	value = Math.abs(value);
+	
 
 	if (value < DEAD_ZONE) {
 		// Exclude dead zone values

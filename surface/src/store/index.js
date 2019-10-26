@@ -61,8 +61,6 @@ class Store extends EventEmitter {
 
 		if(JSON.stringify(this.data.gamepad.state) == JSON.stringify(newState)) return;
 
-		console.log('I get througjh');
-
 		this.data.gamepad.state = newState;
 
 		this.gamepadUpdated();
