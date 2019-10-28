@@ -138,7 +138,6 @@ app.on('ready', () => {
 		store.updateGamepadState(data);
 		console.log(data);
 		publish(data);
-		
 	});
 
 	ipcMain.on(CALIBRATE_CALL, (event, args) =>{
