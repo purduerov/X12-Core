@@ -4,6 +4,7 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 
 const path = require('path');
 const {spawn} = require('child_process');
+const publish = require('./src/ros/roslib_comm.js');
 
 const fs = require('fs');
 
@@ -135,6 +136,9 @@ app.on('ready', () => {
 	
 	gamepad.on('message', (data) => {
 		store.updateGamepadState(data);
+		console.log(data);
+		publish(data);
+		
 	});
 
 	ipcMain.on(CALIBRATE_CALL, (event, args) =>{
