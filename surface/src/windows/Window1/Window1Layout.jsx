@@ -16,9 +16,6 @@ export default class Window1Layout extends Component {
 	constructor(props){
 		super(props);
 		this.state = defaultStore;
-		ipcRenderer.on(STORE_UPDATED, (event, newStore) => {
-			this.setState(newStore);
-		});
 	}
 
 	render() {
