@@ -22,7 +22,7 @@ let clickCount = 0;
 let newLayout = {
 	binary: {},
 	continuous:{}
-}
+};
 
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];

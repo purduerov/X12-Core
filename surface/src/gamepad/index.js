@@ -26,7 +26,7 @@ let other = {
 	'lastAction': null,
 	'ctInput': false,
 	'isBinary': false
-}
+};
 let gamepadState = _.assign(layout.continuous, layout.binary, other);
 gamepadState = _.mapValues(gamepadState, () => 0);
 
@@ -97,8 +97,6 @@ gamepad.on('down', function (controller, id) {
 
 	gamepadState.lastAction = id;
 	gamepadState.isBinary = true;
-
-	console.log(id);
 
 	try {
 		const key = _.findKey(layout.binary, val => val == id);
