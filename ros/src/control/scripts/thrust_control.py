@@ -1,6 +1,6 @@
 #! /usr/bin/python
 import rospy
-from shared_msgs.msg import auto_control_msg, final_thrust_msg, thrust_status_msg, thrust_command_msg
+from shared_msgs.msg import auto_control_msg, final_thrust_msg, thrust_status_msg, thrust_command_msg, controller_msg
 from sensor_msgs.msg import Imu
 from std_msgs.msg import Float32
 import numpy as np
@@ -15,9 +15,6 @@ MAX_CHANGE = .1
 #watch dog stuff
 last_packet_time = 0.0
 is_timed_out = False
-#flags to prevent old data
-new_auto_data = False
-new_pilot_data = False
 # timout in ms
 WATCHDOG_TIMEOUT = 10
 
@@ -25,14 +22,25 @@ def _pilot_command(comm):
   global desired_p #desired thrust from pilot
   global disabled_list #disabled thrusters
   global inverted_list #inverted thrusters
-  global new_pilot_data
   global desired_p_unramped
-  print 'new_pilot_data'
+  print ('new_pilot_data')
   desired_p_unramped = comm.desired_thrust
-  disabled_list = comm.disable_thrusters
-  inverted_list = comm.inverted
-  new_pilot_data = True
-
+  #disabled_list = comm.disable_thrusters
+  #inverted_list = comm.inverted
+def _teleop(contr):
+    global desired_p_unramped #desired thrust from pilot
+    desired_p_unramped[0] = contr.LX_axis #translational
+    desired_p_unramped[1] = contr.LY_axis #translation
+    desired_p_unramped[2] = contr.Rtrigger-contr.Ltrigger
+    if contr.a == 1:
+        desired_p_unramped[3] = .3
+    elif contr.b == 1:
+        desired_p_unramped[3] = -.3
+    else:
+        desired_p_unramped[3] = 0.0
+    desired_p_unramped[4] = contr.RY_axis #pitch
+    desired_p_unramped[5] = contr.RX_axis #yaw
+    print( "message")
 
 def ramp(index):
     if (abs(desired_p_unramped[index] - desired_p[index]) > MAX_CHANGE):
@@ -45,7 +53,6 @@ def ramp(index):
         desired_p[index] = desired_p_unramped[index]
         
 def on_loop():
-    global new_pilot_data
     global new_auto_data
     global is_timed_out
     global last_packet_time
@@ -53,15 +60,14 @@ def on_loop():
       ramp(i)
       desired_thrust_final[i] = desired_p[i]
 
-    print "on_loop p=" + str(new_pilot_data) + " a=" + str(new_auto_data) + " t=" + str(is_timed_out)
 
 
     #calculate thrust
     pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
     #invert relevant values
-    for i in range(8):
-      if inverted_list[i] == 1:
-        pwm_values[i] = pwm_values[i] * (-1)
+    # for i in range(8):
+    #   if inverted_list[i] == 1:
+    #     pwm_values[i] = pwm_values[i] * (-1)
 
     #assign values to publisher messages for thurst control and status
     tcm = final_thrust_msg()
@@ -90,12 +96,11 @@ if __name__ == "__main__":
 
   #initialize node and rate
   rospy.init_node('thrust_control')
-  rate = rospy.Rate(1) #10 hz
+  rate = rospy.Rate(20) #10 hz
 
   #initialize subscribers
-  comm_sub = rospy.Subscriber('/surface/thrust_command',
-      thrust_command_msg, _pilot_command)
-
+  #comm_sub = rospy.Subscriber('/surface/thrust_command', thrust_command_msg, _pilot_command)
+  controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
   #initialize publishers
   thrust_pub = rospy.Publisher('final_thrust',
       final_thrust_msg, queue_size=10)
