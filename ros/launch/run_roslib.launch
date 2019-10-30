@@ -1,0 +1,5 @@
+<launch> 
+    <group ns = "roslib"> 
+        <node name="gp_listen" pkg="roslib_comm" type="gamepad_listener.py"/>
+    </group>
+</launch>

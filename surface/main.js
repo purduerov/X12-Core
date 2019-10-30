@@ -4,6 +4,7 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 
 const path = require('path');
 const {spawn} = require('child_process');
+const publish = require('./src/ros/roslib_comm.js');
 
 const fs = require('fs');
 
@@ -22,7 +23,7 @@ let clickCount = 0;
 let newLayout = {
 	binary: {},
 	continuous:{}
-}
+};
 
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];
@@ -135,6 +136,8 @@ app.on('ready', () => {
 	
 	gamepad.on('message', (data) => {
 		store.updateGamepadState(data);
+		console.log(data);
+		publish(data);
 	});
 
 	ipcMain.on(CALIBRATE_CALL, (event, args) =>{

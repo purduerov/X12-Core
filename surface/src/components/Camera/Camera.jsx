@@ -29,7 +29,9 @@ class Camera extends React.Component {
 		return (
 			<Container>
 				<Row style={{height: '80%'}}>
-					<iframe src="http://192.168.1.3:8090/test.mjpg" frameBorder="0" height="100%" width="100%"></iframe>
+					<Col>
+						<img src="http://localhost:8000/camera/mjpeg" width="100%"/>
+					</Col>
 				</Row>
 				<Row style={{height: '20%'}}>
 					<Col>
