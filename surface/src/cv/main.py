@@ -15,6 +15,7 @@ import time
 
 
 capture=None
+face_cascade = cv2.CascadeClassifier('/home/ivan/ROV/X12-Core/surface/src/cv/haarcascade_frontalface_default.xml')
 
 class StreamHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
@@ -27,8 +28,18 @@ class StreamHandler(BaseHTTPRequestHandler):
 					rc, img = capture.read()
 					if not rc:
 						continue
-					imgRGB=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+					# CV Process
+					gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+					faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+					
+					imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 					imgRGB = cv2.putText(imgRGB, 'I am the code', (10,450), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 255, 0), 2, cv2.LINE_AA)
+
+					for x, y, w, h in faces:
+						imgRGB = cv2.rectangle(imgRGB, (x, y), (x+w, y+h), (255, 0, 0), 2)
+
+					# Output to server
 					jpg = Image.fromarray(imgRGB)
 					tmpFile = StringIO.StringIO()
 					jpg.save(tmpFile,'JPEG')
