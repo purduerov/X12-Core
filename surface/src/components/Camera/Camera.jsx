@@ -30,22 +30,22 @@ class Camera extends React.Component {
 			<Container>
 				<Row style={{height: '80%'}}>
 					<Col>
-						<img src="http://localhost:8000/camera/mjpeg" width="100%"/>
+						<img src="http://127.0.0.1:8080/cam.mjpg" width="100%"/>
 					</Col>
 				</Row>
 				<Row style={{height: '20%'}}>
 					<Col>
-						<iframe src="http://192.168.1.3:8090/test2.mjpg" frameBorder="0" height="100%" width="100%"></iframe>
+						<img src="http://127.0.0.1:8080/cam.mjpg" width="100%"/>
 					</Col>
 					<Col>
-						Feed 3
+						<img src="http://127.0.0.1:8080/cam.mjpg" width="100%"/>
 					</Col>
 					
 					<Col>
-						Feed 4
+						<img src="http://127.0.0.1:8080/cam.mjpg" width="100%"/>
 					</Col>
 					<Col>
-						Feed 5
+						<img src="http://127.0.0.1:8080/cam.mjpg" width="100%"/>
 					</Col>
 				</Row>
 			</Container>
