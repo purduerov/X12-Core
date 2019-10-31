@@ -15,10 +15,10 @@ if __name__ == "__main__":
         t = float(input("give and Throttle value:"))
         rt = float(input("give a Right trigger value"))
         lt = float(input("give a Left trigger value"))
-        m.X_axis = x
-        m.Y_axis = y
-        m.Z_axis = z
-        m.throttle = t
+        m.RX_axis = x
+        m.RY_axis = y
+        m.LX_axis = z
+        m.LY_axis = t
         m.Rtrigger = rt
         m.Ltrigger = lt
         pub.publish(m)

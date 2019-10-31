@@ -1,15 +1,16 @@
 #! /bin/bash
 
-export ROS_IP=10.42.0.1
-export ROS_MASTER_URI=http://10.42.0.204:11311
+export ROS_IP=192.168.1.5
+export ROS_MASTER_URI=http://192.168.1.2:11311
+export ROS_HOSTNAME=192.168.1.5
 source devel/setup.bash
 
-echo "|$0| |$1|"
+#echo "|$0| |$1|"
 
-if [ "$1" == "mock" ] || [ "$1" == "Mock" ]
-then
-	roslaunch launch/run_msurface.launch
-else
-	roslaunch launch/run_surface.launch
-fi
+#if [ "$1" == "mock" ] || [ "$1" == "Mock" ]
+#then
+#	roslaunch launch/run_msurface.launch
+#else
+#	roslaunch launch/run_surface.launch
+#fi
 
