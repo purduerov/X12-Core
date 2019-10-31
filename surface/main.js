@@ -23,7 +23,7 @@ let clickCount = 0;
 let newLayout = {
 	binary: {},
 	continuous:{}
-}
+};
 
 function createWindow(idx) {
 	const windowFile = windowFiles[idx];
@@ -84,6 +84,13 @@ app.on('ready', () => {
 
 	});
 
+	//const camStream = spawn('python', ['src/cv/main.py']);
+	/*
+	camStream.stdout.on('data', (data) => {
+		console.log(data);
+	});
+	*/
+
 	store.on(STORE_UPDATED, newStore => {
 		windows[0].webContents.send(STORE_UPDATED, newStore);
 	});
@@ -131,14 +138,13 @@ app.on('ready', () => {
 	
 	gamepad.stdout.on('data', (data) => {
 		//windows[0].webContents.send(CALIBRATE_RECEIVE, `${data}`);
-		console.log(`${data}`);
+		//console.log(`${data}`);
 	});
 	
 	gamepad.on('message', (data) => {
 		store.updateGamepadState(data);
-		console.log(data);
+		//console.log(data);
 		publish(data);
-		
 	});
 
 	ipcMain.on(CALIBRATE_CALL, (event, args) =>{
