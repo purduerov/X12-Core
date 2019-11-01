@@ -12,35 +12,39 @@ locked_dims_list = [False, False, False, False, False, False]
 disabled_list = [False, False, False, False, False, False, False, False]
 inverted_list = [0, 0, 0, 0, 0, 0, 0, 0]
 MAX_CHANGE = .1
-#watch dog stuff
+# watch dog stuff
 last_packet_time = 0.0
 is_timed_out = False
 # timout in ms
 WATCHDOG_TIMEOUT = 10
 
+
 def _pilot_command(comm):
-  global desired_p #desired thrust from pilot
-  global disabled_list #disabled thrusters
-  global inverted_list #inverted thrusters
-  global desired_p_unramped
-  print ('new_pilot_data')
-  desired_p_unramped = comm.desired_thrust
-  #disabled_list = comm.disable_thrusters
-  #inverted_list = comm.inverted
+    global desired_p  # desired thrust from pilot
+    global disabled_list  # disabled thrusters
+    global inverted_list  # inverted thrusters
+    global desired_p_unramped
+    print ('new_pilot_data')
+    desired_p_unramped = comm.desired_thrust
+    # disabled_list = comm.disable_thrusters
+    # inverted_list = comm.inverted
+
+
 def _teleop(contr):
-    global desired_p_unramped #desired thrust from pilot
-    desired_p_unramped[0] = contr.LX_axis #translational
-    desired_p_unramped[1] = contr.LY_axis #translation
-    desired_p_unramped[2] = contr.Rtrigger-contr.Ltrigger
+    global desired_p_unramped  # desired thrust from pilot
+    desired_p_unramped[0] = contr.LX_axis  # translational
+    desired_p_unramped[1] = contr.LY_axis  # translation
+    desired_p_unramped[2] = contr.Rtrigger - contr.Ltrigger
     if contr.a == 1:
         desired_p_unramped[3] = .3
     elif contr.b == 1:
         desired_p_unramped[3] = -.3
     else:
         desired_p_unramped[3] = 0.0
-    desired_p_unramped[4] = contr.RY_axis #pitch
-    desired_p_unramped[5] = contr.RX_axis #yaw
-    print( "message")
+    desired_p_unramped[4] = contr.RY_axis  # pitch
+    desired_p_unramped[5] = contr.RX_axis  # yaw
+    print("message")
+
 
 def ramp(index):
     if (abs(desired_p_unramped[index] - desired_p[index]) > MAX_CHANGE):
@@ -51,25 +55,24 @@ def ramp(index):
         return
     else:
         desired_p[index] = desired_p_unramped[index]
-        
+
+
 def on_loop():
     global new_auto_data
     global is_timed_out
     global last_packet_time
-    for i in range(0,6):
-      ramp(i)
-      desired_thrust_final[i] = desired_p[i]
+    for i in range(0, 6):
+        ramp(i)
+        desired_thrust_final[i] = desired_p[i]
 
-
-
-    #calculate thrust
+    # calculate thrust
     pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
-    #invert relevant values
+    # invert relevant values
     # for i in range(8):
     #   if inverted_list[i] == 1:
     #     pwm_values[i] = pwm_values[i] * (-1)
 
-    #assign values to publisher messages for thurst control and status
+    # assign values to publisher messages for thurst control and status
     tcm = final_thrust_msg()
     # val = float of range(-1, 1)
     # if int8: (val * 127.5) - 0.5 will give range -128 to 127
@@ -85,33 +88,34 @@ def on_loop():
 
     tsm = thrust_status_msg()
     tsm.status = pwm_values
-    #publish data
+    # publish data
     thrust_pub.publish(tcm)
     status_pub.publish(tsm)
 
+
 if __name__ == "__main__":
-  '''
-  Note that this file is only set up for using 8 thrusters.
-  '''
+    '''
+    Note that this file is only set up for using 8 thrusters.
+    '''
 
-  #initialize node and rate
-  rospy.init_node('thrust_control')
-  rate = rospy.Rate(20) #10 hz
+    # initialize node and rate
+    rospy.init_node('thrust_control')
+    rate = rospy.Rate(20)  # 10 hz
 
-  #initialize subscribers
-  #comm_sub = rospy.Subscriber('/surface/thrust_command', thrust_command_msg, _pilot_command)
-  #controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
-  controller_sub = rospy.Subscriber('gamepad_listener',controller_msg, _teleop)
-  #initialize publishers
-  thrust_pub = rospy.Publisher('final_thrust',
-      final_thrust_msg, queue_size=10)
-  status_pub = rospy.Publisher('thrust_status',
-      thrust_status_msg, queue_size=10)
+    # initialize subscribers
+    # comm_sub = rospy.Subscriber('/surface/thrust_command', thrust_command_msg, _pilot_command)
+    # controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
+    controller_sub = rospy.Subscriber('gamepad_listener', controller_msg, _teleop)
+    # initialize publishers
+    thrust_pub = rospy.Publisher('final_thrust',
+                                 final_thrust_msg, queue_size=10)
+    status_pub = rospy.Publisher('thrust_status',
+                                 thrust_status_msg, queue_size=10)
 
-  #define variable for class Complex to allow calculation of thruster pwm values
-  c = Complex_1.Complex()
-  desired_thrust_final = [0, 0, 0, 0, 0, 0]
+    # define variable for class Complex to allow calculation of thruster pwm values
+    c = Complex_1.Complex()
+    desired_thrust_final = [0, 0, 0, 0, 0, 0]
 
-  while not rospy.is_shutdown():
-    on_loop()
-    rate.sleep()
+    while not rospy.is_shutdown():
+        on_loop()
+        rate.sleep()

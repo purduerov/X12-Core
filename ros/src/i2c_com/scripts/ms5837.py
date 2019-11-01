@@ -10,8 +10,8 @@ MODEL_02BA = 0
 MODEL_30BA = 1
 
 # Oversampling options
-OSR_256  = 0
-OSR_512  = 1
+OSR_256 = 0
+OSR_512 = 1
 OSR_1024 = 2
 OSR_2048 = 3
 OSR_4096 = 4
@@ -22,30 +22,29 @@ DENSITY_FRESHWATER = 997
 DENSITY_SALTWATER = 1029
 
 # Conversion factors (from native unit, mbar)
-UNITS_Pa     = 100.0
-UNITS_hPa    = 1.0
-UNITS_kPa    = 0.1
-UNITS_mbar   = 1.0
-UNITS_bar    = 0.001
-UNITS_atm    = 0.000986923
-UNITS_Torr   = 0.750062
-UNITS_psi    = 0.014503773773022
+UNITS_Pa = 100.0
+UNITS_hPa = 1.0
+UNITS_kPa = 0.1
+UNITS_mbar = 1.0
+UNITS_bar = 0.001
+UNITS_atm = 0.000986923
+UNITS_Torr = 0.750062
+UNITS_psi = 0.014503773773022
 
 # Valid units
 UNITS_Centigrade = 1
-UNITS_Farenheit  = 2
-UNITS_Kelvin     = 3
+UNITS_Farenheit = 2
+UNITS_Kelvin = 3
 
 
 class MS5837(object):
-
     # Registers
-    _MS5837_ADDR             = 0x76
-    _MS5837_RESET            = 0x1E
-    _MS5837_ADC_READ         = 0x00
-    _MS5837_PROM_READ        = 0xA0
-    _MS5837_CONVERT_D1_256   = 0x40
-    _MS5837_CONVERT_D2_256   = 0x50
+    _MS5837_ADDR = 0x76
+    _MS5837_RESET = 0x1E
+    _MS5837_ADC_READ = 0x00
+    _MS5837_PROM_READ = 0xA0
+    _MS5837_CONVERT_D1_256 = 0x40
+    _MS5837_CONVERT_D2_256 = 0x50
 
     def __init__(self, model=MODEL_30BA, bus=1):
         self._model = model
@@ -77,8 +76,8 @@ class MS5837(object):
 
         # Read calibration values and CRC
         for i in range(7):
-            c = self._bus.read_word_data(self._MS5837_ADDR, self._MS5837_PROM_READ + 2*i)
-            c =  ((c & 0xFF) << 8) | (c >> 8) # SMBus is little-endian for word transfers, we need to swap MSB and LSB
+            c = self._bus.read_word_data(self._MS5837_ADDR, self._MS5837_PROM_READ + 2 * i)
+            c = ((c & 0xFF) << 8) | (c >> 8)  # SMBus is little-endian for word transfers, we need to swap MSB and LSB
             self._C.append(c)
 
         crc = (self._C[0] & 0xF000) >> 12
@@ -86,22 +85,19 @@ class MS5837(object):
             print "PROM read error, CRC failed!"
             return
 
-
         # for pressure calibration for depth
-        PressDepthConv=0.01
+        PressDepthConv = 0.01
 
         self._data = {
-		"pressure": 0,		# +/- 50 milibars
-		"temperature": 0	# +/- 1.5 celsius
-	}
+            "pressure": 0,  # +/- 50 milibars
+            "temperature": 0  # +/- 1.5 celsius
+        }
 
-	# for dynamicDepth pressure calibration
-	self.initPressure = 0
-	self.conv = PressDepthConv
-	self.update()
-	self.initPressure = self._data['pressure']
-
-
+        # for dynamicDepth pressure calibration
+        self.initPressure = 0
+        self.conv = PressDepthConv
+        self.update()
+        self.initPressure = self._data['pressure']
 
     def read(self, oversampling=OSR_8192):
         if self._bus is None:
@@ -113,21 +109,21 @@ class MS5837(object):
             return False
 
         # Request D1 conversion (temperature)
-        self._bus.write_byte(self._MS5837_ADDR, self._MS5837_CONVERT_D1_256 + 2*oversampling)
+        self._bus.write_byte(self._MS5837_ADDR, self._MS5837_CONVERT_D1_256 + 2 * oversampling)
 
         # Maximum conversion time increases linearly with oversampling
         # max time (seconds) ~= 2.2e-6(x) where x = OSR = (2^8, 2^9, ..., 2^13)
         # We use 2.5e-6 for some overhead
-        time.sleep(2.5e-6 * 2**(8+oversampling))
+        time.sleep(2.5e-6 * 2 ** (8 + oversampling))
 
         d = self._bus.read_i2c_block_data(self._MS5837_ADDR, self._MS5837_ADC_READ, 3)
         self._D1 = d[0] << 16 | d[1] << 8 | d[2]
 
         # Request D2 conversion (pressure)
-        self._bus.write_byte(self._MS5837_ADDR, self._MS5837_CONVERT_D2_256 + 2*oversampling)
+        self._bus.write_byte(self._MS5837_ADDR, self._MS5837_CONVERT_D2_256 + 2 * oversampling)
 
         # As above
-        time.sleep(2.5e-6 * 2**(8+oversampling))
+        time.sleep(2.5e-6 * 2 ** (8 + oversampling))
 
         d = self._bus.read_i2c_block_data(self._MS5837_ADDR, self._MS5837_ADC_READ, 3)
         self._D2 = d[0] << 16 | d[1] << 8 | d[2]
@@ -151,20 +147,20 @@ class MS5837(object):
     def temperature(self, conversion=UNITS_Centigrade):
         degC = self._temperature / 100.0
         if conversion == UNITS_Farenheit:
-            return (9/5) * degC + 32
+            return (9 / 5) * degC + 32
         elif conversion == UNITS_Kelvin:
             return degC - 273
         return degC
 
     # Depth relative to MSL pressure in given fluid density
     def depth(self):
-        return (self.pressure(UNITS_Pa)-101300)/(self._fluidDensity*9.80665)
+        return (self.pressure(UNITS_Pa) - 101300) / (self._fluidDensity * 9.80665)
 
     # Depth relative to surface pressure
     @property
     def data(self):
-        #self._data['depth'] = self._data['pressure']*self.conv
-        #return self._data
+        # self._data['depth'] = self._data['pressure']*self.conv
+        # return self._data
         self._data['pressure'] = self.pressure()
         self._data['depth'] = self.depth()
         return self._data
@@ -173,18 +169,18 @@ class MS5837(object):
     def update(self):
         if self.read():
             # pressure in mBars
-	    pressure = self.pressure() - self.initPressure
-	    self._data['pressure'] = pressure
+            pressure = self.pressure() - self.initPressure
+            self._data['pressure'] = pressure
 
-	    # temp in celsius
-	    temperature = self.temperature()
-	    self._data['temperature'] = temperature
-	else:
-	    pass
+            # temp in celsius
+            temperature = self.temperature()
+            self._data['temperature'] = temperature
+        else:
+            pass
 
     # Altitude relative to MSL pressure
     def altitude(self):
-        return (1-pow((self.pressure()/1013.25),.190284))*145366.45*.3048
+        return (1 - pow((self.pressure() / 1013.25), .190284)) * 145366.45 * .3048
 
     # Cribbed from datasheet
     def _calculate(self):
@@ -192,47 +188,47 @@ class MS5837(object):
         SENSi = 0
         Ti = 0
 
-        dT = self._D2-self._C[5]*256
+        dT = self._D2 - self._C[5] * 256
         if self._model == MODEL_02BA:
-            SENS = self._C[1]*65536+(self._C[3]*dT)/128
-            OFF = self._C[2]*131072+(self._C[4]*dT)/64
-            self._pressure = (self._D1*SENS/(2097152)-OFF)/(32768)
+            SENS = self._C[1] * 65536 + (self._C[3] * dT) / 128
+            OFF = self._C[2] * 131072 + (self._C[4] * dT) / 64
+            self._pressure = (self._D1 * SENS / (2097152) - OFF) / (32768)
         else:
-            SENS = self._C[1]*32768+(self._C[3]*dT)/256
-            OFF = self._C[2]*65536+(self._C[4]*dT)/128
-            self._pressure = (self._D1*SENS/(2097152)-OFF)/(8192)
+            SENS = self._C[1] * 32768 + (self._C[3] * dT) / 256
+            OFF = self._C[2] * 65536 + (self._C[4] * dT) / 128
+            self._pressure = (self._D1 * SENS / (2097152) - OFF) / (8192)
 
-        self._temperature = 2000+dT*self._C[6]/8388608
+        self._temperature = 2000 + dT * self._C[6] / 8388608
 
         # Second order compensation
         if self._model == MODEL_02BA:
-            if (self._temperature/100) < 20: # Low temp
-                Ti = (11*dT*dT)/(34359738368)
-                OFFi = (31*(self._temperature-2000)*(self._temperature-2000))/8
-                SENSi = (63*(self._temperature-2000)*(self._temperature-2000))/32
+            if (self._temperature / 100) < 20:  # Low temp
+                Ti = (11 * dT * dT) / (34359738368)
+                OFFi = (31 * (self._temperature - 2000) * (self._temperature - 2000)) / 8
+                SENSi = (63 * (self._temperature - 2000) * (self._temperature - 2000)) / 32
 
         else:
-            if (self._temperature/100) < 20: # Low temp
-                Ti = (3*dT*dT)/(8589934592)
-                OFFi = (3*(self._temperature-2000)*(self._temperature-2000))/2
-                SENSi = (5*(self._temperature-2000)*(self._temperature-2000))/8
-                if (self._temperature/100) < -15: # Very low temp
-                    OFFi = OFFi+7*(self._temperature+1500l)*(self._temperature+1500)
-                    SENSi = SENSi+4*(self._temperature+1500l)*(self._temperature+1500)
-            elif (self._temperature/100) >= 20: # High temp
-                Ti = 2*(dT*dT)/(137438953472)
-                OFFi = (1*(self._temperature-2000)*(self._temperature-2000))/16
+            if (self._temperature / 100) < 20:  # Low temp
+                Ti = (3 * dT * dT) / (8589934592)
+                OFFi = (3 * (self._temperature - 2000) * (self._temperature - 2000)) / 2
+                SENSi = (5 * (self._temperature - 2000) * (self._temperature - 2000)) / 8
+                if (self._temperature / 100) < -15:  # Very low temp
+                    OFFi = OFFi + 7 * (self._temperature + 1500l) * (self._temperature + 1500)
+                    SENSi = SENSi + 4 * (self._temperature + 1500l) * (self._temperature + 1500)
+            elif (self._temperature / 100) >= 20:  # High temp
+                Ti = 2 * (dT * dT) / (137438953472)
+                OFFi = (1 * (self._temperature - 2000) * (self._temperature - 2000)) / 16
                 SENSi = 0
 
-        OFF2 = OFF-OFFi
-        SENS2 = SENS-SENSi
+        OFF2 = OFF - OFFi
+        SENS2 = SENS - SENSi
 
         if self._model == MODEL_02BA:
-            self._temperature = (self._temperature-Ti)
-            self._pressure = (((self._D1*SENS2)/2097152-OFF2)/32768)/100.0
+            self._temperature = (self._temperature - Ti)
+            self._pressure = (((self._D1 * SENS2) / 2097152 - OFF2) / 32768) / 100.0
         else:
-            self._temperature = (self._temperature-Ti)
-            self._pressure = (((self._D1*SENS2)/2097152-OFF2)/8192)/10.0
+            self._temperature = (self._temperature - Ti)
+            self._pressure = (((self._D1 * SENS2) / 2097152 - OFF2) / 8192) / 10.0
 
     # Cribbed from datasheet
     def _crc4(self, n_prom):
@@ -242,12 +238,12 @@ class MS5837(object):
         n_prom.append(0)
 
         for i in range(16):
-            if i%2 == 1:
-                n_rem ^= ((n_prom[i>>1]) & 0x00FF)
+            if i % 2 == 1:
+                n_rem ^= ((n_prom[i >> 1]) & 0x00FF)
             else:
-                n_rem ^= (n_prom[i>>1] >> 8)
+                n_rem ^= (n_prom[i >> 1] >> 8)
 
-            for n_bit in range(8,0,-1):
+            for n_bit in range(8, 0, -1):
                 if n_rem & 0x8000:
                     n_rem = (n_rem << 1) ^ 0x3000
                 else:
@@ -260,22 +256,26 @@ class MS5837(object):
 
         return n_rem ^ 0x00
 
+
 class MS5837_30BA(MS5837):
     def __init__(self, bus=1):
         MS5837.__init__(self, MODEL_30BA, bus)
+
 
 class MS5837_02BA(MS5837):
     def __init__(self, bus=1):
         MS5837.__init__(self, MODEL_02BA, bus)
 
+
 if __name__ == '__main__':
     import time
 
+
     def main():
-        sensor = MS5837() # Default I2C bus is 1 (Raspberry Pi 3)
+        sensor = MS5837()  # Default I2C bus is 1 (Raspberry Pi 3)
 
         # We must initialize the sensor before reading it
-        #if not sensor.init():
+        # if not sensor.init():
         #        print "Sensor could not be initialized"
         #        exit(1)
 
@@ -284,22 +284,24 @@ if __name__ == '__main__':
             print "Sensor read failed!"
             exit(1)
 
-        #print("Pressure: %.2f mbar") % (sensor.pressure())
+        # print("Pressure: %.2f mbar") % (sensor.pressure())
 
-        #print("Temperature: %.2f C") % (sensor.temperature(ms5837.UNITS_Centigrade))
+        # print("Temperature: %.2f C") % (sensor.temperature(ms5837.UNITS_Centigrade))
 
-        #time.sleep(2)
+        # time.sleep(2)
 
         print("Time \tPressure (mbar) \tTemperature (C)")
 
         # Spew readings
         while True:
-                if sensor.read():
-                    print("%s \t%0.1f \t%0.2f") % (time.strftime("%H:%M:%S", time.localtime()) + '.%d' % (time.time() % 1 * 1000),
-                        sensor.pressure(), # Default is mbar (no arguments)
-                        sensor.depth()) # Default is degrees C (no arguments)
-                else:
-                        print "Sensor read failed!"
-                        exit(1)
+            if sensor.read():
+                print("%s \t%0.1f \t%0.2f") % (
+                time.strftime("%H:%M:%S", time.localtime()) + '.%d' % (time.time() % 1 * 1000),
+                sensor.pressure(),  # Default is mbar (no arguments)
+                sensor.depth())  # Default is degrees C (no arguments)
+            else:
+                print "Sensor read failed!"
+                exit(1)
+
 
     main()

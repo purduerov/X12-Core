@@ -2,18 +2,20 @@
 import cv2
 import rospy
 from sensor_msgs.msg import Image
-from cv_bridge import CvBridge, CvBridgeError   #converts between ROS Image messages and OpenCV images
+from cv_bridge import CvBridge, CvBridgeError  # converts between ROS Image messages and OpenCV images
 import numpy as np
 from imutils.convenience import grab_contours
-
 
 bridge = CvBridge()
 
 """ Program to match shapes"""
+
+
 def match_shapes(orig_img):
     # Read in the images for matching
     species = ["species_" + name for name in ["A", "B", "C", "D"]]
-    shape_images = [cv2.cvtColor(cv2.imread("shape_images/" + image_name + ".png"), cv2.COLOR_BGR2GRAY) for image_name in species]
+    shape_images = [cv2.cvtColor(cv2.imread("shape_images/" + image_name + ".png"), cv2.COLOR_BGR2GRAY) for image_name
+                    in species]
     shape_contours = []
 
     img = cv2.cvtColor(orig_img, cv2.COLOR_BGR2GRAY)
@@ -56,18 +58,16 @@ def match_shapes(orig_img):
         for shape_contour, species_name in zip(shape_contours, species):
             potential_shape_moments = cv2.moments(shape_contour)
             potential_hu_moments = cv2.HuMoments(potential_shape_moments)
-            dist = sum([(x - y)**2 for x,y in zip(potential_hu_moments[0:5], hu_shape_moments[0:5])])
+            dist = sum([(x - y) ** 2 for x, y in zip(potential_hu_moments[0:5], hu_shape_moments[0:5])])
 
-            #dist = cv2.matchShapes(potential_shape, shape_contour, cv2.CONTOURS_MATCH_I3, 0)
+            # dist = cv2.matchShapes(potential_shape, shape_contour, cv2.CONTOURS_MATCH_I3, 0)
             probable_species = (dist, species_name) if dist < probable_species[0] else probable_species
         if not probable_species[1]:
             break
 
-
         moments = cv2.moments(potential_shape)
         shape_centerX = int((moments["m10"] / moments["m00"]))
         shape_centerY = int((moments["m01"] / moments["m00"]))
-
 
         cv2.putText(orig_img, probable_species[1], (shape_centerX, shape_centerY), cv2.FONT_HERSHEY_COMPLEX,
                     .5, (0, 0, 255), 2)
@@ -76,12 +76,13 @@ def match_shapes(orig_img):
         cv2.imshow("Shapes", orig_img)
         cv2.waitKey(1)
 
+
 def image_callback(img_msg):
-  frame = bridge.imgmsg_to_cv2(img_msg,"bgr8")
-  match_shapes(frame)
+    frame = bridge.imgmsg_to_cv2(img_msg, "bgr8")
+    match_shapes(frame)
+
 
 if __name__ == "__main__":
-  rospy.init_node('shapeId',anonymous=True)
-  rospy.Subscriber("/usb_cam/image_raw",Image,image_callback)
-  rospy.spin()
-
+    rospy.init_node('shapeId', anonymous=True)
+    rospy.Subscriber("/usb_cam/image_raw", Image, image_callback)
+    rospy.spin()

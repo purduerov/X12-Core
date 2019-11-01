@@ -1,5 +1,6 @@
 import numpy
 
+
 class PI(object):
     """A generic PID loop controller which can be inherited and used in other control algorithms"""
 
@@ -7,16 +8,14 @@ class PI(object):
         """Return a instance of a un tuned PID controller"""
         self._p = p
         self._i = i
-        self._esum = 0              #Error sum for integral term
+        self._esum = 0  # Error sum for integral term
         self._count = 0
 
     def calculate(self, error, dt):
-
         """Calculates the output of the PI controller"""
-        self._esum += error*dt
-        u = self._p*error + self._i*self._esum
+        self._esum += error * dt
+        u = self._p * error + self._i * self._esum
         return u
-
 
     def reset(self):
         """Resets the integral sum"""
