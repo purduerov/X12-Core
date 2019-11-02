@@ -8,8 +8,10 @@ echo "|$0| |$1|"
 
 if [ "$1" == "mock" ] || [ "$1" == "Mock" ]
 then
-	roslaunch launch/run_msurface.launch
+	#roslaunch launch/run_msurface.launch
+	echo 'fuck'
 else
-	roslaunch launch/run_surface.launch
+	#roslaunch launch/run_surface.launch
+	roslaunch launch/run_roslib.launch
 fi
 

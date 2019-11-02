@@ -11,9 +11,7 @@ def callback(data):
 def listener():
 
     rospy.init_node('listening', anonymous=True)
-
     rospy.Subscriber('gamepad_listener', controller_msg, callback)
-
     rospy.spin()
 
 if __name__ == '__main__':
