@@ -9,13 +9,24 @@ import Camera from '../../components/Camera/Camera.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
 
 import defaultStore from '../../store/defaults.json';
-import { STORE_UPDATED } from '../../constants';
+import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
 
 
 export default class Window1Layout extends Component {
 	constructor(props){
 		super(props);
-		this.state = defaultStore;
+		const sampleData = require('electron').remote.require('./src/gamepad/sample-emitter.js').sample;
+
+		this.state = {
+			gamepad: {
+				sampleData: 0
+			}
+		};
+		
+		sampleData.on(SAMPLE_UPDATE, () => {
+			this.setState({ gamepad: { sampleData: sampleData.number }});
+		});
+		
 	}
 
 	render() {
