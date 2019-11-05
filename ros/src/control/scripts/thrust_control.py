@@ -11,7 +11,7 @@ desired_p_unramped = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 locked_dims_list = [False, False, False, False, False, False]
 disabled_list = [False, False, False, False, False, False, False, False]
 inverted_list = [0, 0, 0, 0, 0, 0, 0, 0]
-MAX_CHANGE = .1
+MAX_CHANGE = .03
 # watch dog stuff
 last_packet_time = 0.0
 is_timed_out = False
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     # initialize node and rate
     rospy.init_node('thrust_control')
-    rate = rospy.Rate(20)  # 10 hz
+    rate = rospy.Rate(50)  # 20 hz
 
     # initialize subscribers
     comm_sub = rospy.Subscriber('/thrust_command', thrust_command_msg, _pilot_command)
@@ -102,4 +102,5 @@ if __name__ == "__main__":
 
     while not rospy.is_shutdown():
         on_loop()
+        rate.sleep()
 

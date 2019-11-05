@@ -36,8 +36,9 @@ def _controller_input(contr):
 
 if __name__ == '__main__':
     rospy.init_node('thrust_controller')
-    controller_sub = rospy.Subscriber('gamepad_listener', controller_msg,_controller_input)
-    thrust_command_pub = rospy.Publisher('thrust_command', thrust_command_msg, queue_size=1)
-    rospy.Rate(10)
+    controller_sub = rospy.Subscriber('/gamepad_listener', controller_msg,_controller_input)
+    thrust_command_pub = rospy.Publisher('/thrust_command', thrust_command_msg, queue_size=1)
+    r = rospy.Rate(50)
     while not rospy.is_shutdown():
         onLoop()
+        r.sleep()
