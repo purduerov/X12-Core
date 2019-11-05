@@ -30,22 +30,6 @@ def _pilot_command(comm):
     # inverted_list = comm.inverted
 
 
-def _teleop(contr):
-    global desired_p_unramped  # desired thrust from pilot
-    desired_p_unramped[0] = contr.LX_axis  # translational
-    desired_p_unramped[1] = contr.LY_axis  # translation
-    desired_p_unramped[2] = contr.Rtrigger - contr.Ltrigger
-    if contr.a == 1:
-        desired_p_unramped[3] = .3
-    elif contr.b == 1:
-        desired_p_unramped[3] = -.3
-    else:
-        desired_p_unramped[3] = 0.0
-    desired_p_unramped[4] = contr.RY_axis  # pitch
-    desired_p_unramped[5] = contr.RX_axis  # yaw
-    print("message")
-
-
 def ramp(index):
     if (abs(desired_p_unramped[index] - desired_p[index]) > MAX_CHANGE):
         if (desired_p_unramped[index] - desired_p[index] > 0):
@@ -103,9 +87,9 @@ if __name__ == "__main__":
     rate = rospy.Rate(20)  # 10 hz
 
     # initialize subscribers
-    # comm_sub = rospy.Subscriber('/surface/thrust_command', thrust_command_msg, _pilot_command)
+    comm_sub = rospy.Subscriber('/thrust_command', thrust_command_msg, _pilot_command)
     # controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
-    controller_sub = rospy.Subscriber('gamepad_listener', controller_msg, _teleop)
+    #controller_sub = rospy.Subscriber('gamepad_listener', controller_msg, _teleop)
     # initialize publishers
     thrust_pub = rospy.Publisher('final_thrust',
                                  final_thrust_msg, queue_size=10)
@@ -118,4 +102,4 @@ if __name__ == "__main__":
 
     while not rospy.is_shutdown():
         on_loop()
-        rate.sleep()
+
