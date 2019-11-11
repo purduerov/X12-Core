@@ -1,0 +1,66 @@
+{
+  "name": "surface",
+  "version": "1.0.0",
+  "description": "Package concerned with the pilot interface and dataflow on the surface side.",
+  "main": "main.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "webpack-dev-server --open --hot --mode development",
+    "build": "webpack --mode production",
+    "webpack-watch": "webpack -w --mode development",
+    "electron-watch": "NODE_ENV=WATCH electron .",
+    "electron": "electron .",
+    "electron-rebuild": "electron-rebuild -w opencv4nodejs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/purduerov/X12-Core.git"
+  },
+  "keywords": [
+    "Surface",
+    "Pilot",
+    "Interface",
+    "Electron",
+    "React",
+    "ROV",
+    "Purdue"
+  ],
+  "author": "ROV Team, lead Nicolas Fransen",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/purduerov/X12-Core/issues"
+  },
+  "homepage": "https://github.com/purduerov/X12-Core/surface#readme",
+  "dependencies": {
+    "bootstrap": "4.3.1",
+    "opencv4nodejs": "^5.3.0",
+    "electron": "6.0.10",
+    "electron-context-menu": "^0.9.1",
+    "gamepad": "1.6.0",
+    "lodash": "4.17.15",
+    "react": "16.9.0",
+    "react-bootstrap": "1.0.0-beta.12",
+    "react-dom": "16.9.0",
+    "react-webworker": "2.1.0",
+    "roslib": "1.0.1",
+    "webpack": "4.40.2",
+    "yup": "0.27.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.6.0",
+    "@babel/core": "7.6.0",
+    "@babel/preset-env": "7.6.0",
+    "@babel/preset-react": "7.0.0",
+    "babel-eslint": "10.0.3",
+    "babel-loader": "8.0.6",
+    "css-loader": "3.2.0",
+    "electron-reload": "1.5.0",
+    "electron-devtools-installer": "2.2.4",
+    "eslint": "6.4.0",
+    "eslint-plugin-react": "7.14.3",
+    "style-loader": "1.0.0",
+    "webpack-cli": "3.3.9",
+    "webpack-combine-loaders": "2.0.4",
+    "webpack-dev-server": "3.8.1"
+  }
+}

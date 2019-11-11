@@ -1,0 +1,6 @@
+<launch> 
+    <group ns = "roslib"> 
+        <node name="downstream_sub" pkg="roslib_comm" type="gamepad_listener.py"/>
+        <node name="upstream_pub" pkg="roslib_comm" type="upstream.py"/>
+    </group>
+</launch>
