@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
   #initialize node and rate
   rospy.init_node('thrust_control')
-  rate = rospy.Rate(20) #10 hz
+  rate = rospy.Rate(50) #50 hz
 
   #initialize subscribers
   comm_sub = rospy.Subscriber('/thrust_command', thrust_command_msg, _pilot_command)
