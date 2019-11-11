@@ -11,8 +11,8 @@ def callback(data):
     
 def listener():
 
-    rospy.init_node('listening', anonymous=True)
-    rospy.Subscriber('gamepad_listener', controller_msg, callback)
+    rospy.init_node('downstream_sub', anonymous=True)
+    rospy.Subscriber('downstream', controller_msg, callback)
     pub = rospy.Publisher('/surface/controller', controller_msg)
     rospy.spin()
 

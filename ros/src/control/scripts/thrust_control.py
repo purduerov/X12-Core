@@ -101,7 +101,7 @@ if __name__ == "__main__":
   #initialize subscribers
   #comm_sub = rospy.Subscriber('/surface/thrust_command', thrust_command_msg, _pilot_command)
   #controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
-  controller_sub = rospy.Subscriber('gamepad_listener',controller_msg, _teleop)
+  controller_sub = rospy.Subscriber('downstream',controller_msg, _teleop)
   #initialize publishers
   thrust_pub = rospy.Publisher('final_thrust',
       final_thrust_msg, queue_size=10)
