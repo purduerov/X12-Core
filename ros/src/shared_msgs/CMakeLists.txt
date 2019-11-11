@@ -59,6 +59,7 @@ add_message_files(
    thrust_status_msg.msg
    tools_command_msg.msg
    controller_msg.msg
+   thrust_disable_inverted_msg.msg
  )
 
 ## Generate services in the 'srv' folder

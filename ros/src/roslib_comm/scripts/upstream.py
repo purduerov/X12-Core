@@ -4,7 +4,7 @@ from std_msgs.msg import String
 from std_msgs.msg import Twist
 
 def talker() :
-    pub = rospy.Pulisher('/upstream', Twist, queue_size=10)
+    pub = rospy.Pulisher('/upstream_data', Twist, queue_size=10)
     rospy.init_node('upstream_pub', anonymous=True)
     rate = rospy.Rate(10)
     while not rospy.is_shutdown() :

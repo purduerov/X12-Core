@@ -2,10 +2,11 @@
 import rospy
 import time
 from shared_msgs.msg import controller_msg
+
 if __name__ == "__main__":
     rospy.init_node("dumb_controller")
-    pub = rospy.Publisher("/surface/controller",controller_msg, queue_size = 2)
-    while(True):
+    pub = rospy.Publisher("/surface/controller", controller_msg, queue_size=2)
+    while (True):
         time.sleep(.1)
         m = controller_msg()
 
@@ -25,4 +26,3 @@ if __name__ == "__main__":
         print(m)
         print("-----------published------------")
         print("-----press ctrl-z to exit-------")
-

@@ -20,7 +20,7 @@ ros.on('close', function() {
 
 /*var upstream = new ROSLIB.Topic({ //for subscribing
   ros : ros,
-  name : 'upstream',
+  name : '/upstream_data',
   messageType : 'std_msgs/Twist'
 }); */
 
@@ -31,7 +31,7 @@ ros.on('close', function() {
 
 const cmdVel = new ROSLIB.Topic({ //for publishing
   ros : ros,
-  name : '/gamepad_listener',
+  name : '/downstream_data',
   messageType : 'shared_msgs/controller_msg'//'geometry_msgs/Twist'
 });
 

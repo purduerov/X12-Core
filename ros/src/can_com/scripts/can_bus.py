@@ -14,13 +14,14 @@ global can_bus
 global pub
 global sub
 
+
 # Subscriber: Called when topic message is received
 def topic_message_received(msg):
     # This runs on a seperate thread from the pub
     global can_bus
     data_list = list()
     shift = 64
-    for i in range(0,8):
+    for i in range(0, 8):
         shift -= 8
         data_list.append((msg.data >> shift) % 256)
     data = bytearray(data_list)
@@ -30,6 +31,7 @@ def topic_message_received(msg):
         can_bus.send(can_tx, timeout=0.00001)
     except can.CanError as cerr:
         pass
+
 
 # Publisher: Called when can bus message is received
 def bus_message_received(can_rx):
@@ -45,6 +47,7 @@ def bus_message_received(can_rx):
     can_rx = can_msg(can_rx.arbitration_id, data)
     pub.publish(can_rx)
 
+
 if __name__ == "__main__":
     global can_bus
     rospy.init_node('can_node')
@@ -55,9 +58,9 @@ if __name__ == "__main__":
     can_bus = can.interface.Bus(channel=channel, bustype='socketcan')
 
     pub = rospy.Publisher('can_rx', can_msg,
-            queue_size= 100)
+                          queue_size=100)
     sub = rospy.Subscriber('can_tx', can_msg,
-            topic_message_received)
+                           topic_message_received)
 
     rospy.loginfo('Started \'can_node\' on channel: ' + channel)
 

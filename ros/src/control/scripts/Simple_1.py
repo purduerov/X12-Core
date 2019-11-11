@@ -45,6 +45,7 @@ maskScaffolding = {
     "Yaw": {"HFR": 1, "HFL": -1}
 }
 
+
 ## This method returns a numpy array of the masks, in the order given from top down
 ## For the default order, top row is X's influences, second row is Y's influences, etc.
 def getMasks(order=["X", "Y", "Z", "Roll", "Pitch", "Yaw"]):
@@ -55,13 +56,14 @@ def getMasks(order=["X", "Y", "Z", "Roll", "Pitch", "Yaw"]):
 
         for thrust in maskScaffolding[key]:
             temp[mappings[thrust]] = weights[key] * maskScaffolding[key][thrust]
-            #print("temp[mappings[{}]] = weights[{}] * maskScaffolding[{}][{}]".format(thrust, key, key, thrust))
+            # print("temp[mappings[{}]] = weights[{}] * maskScaffolding[{}][{}]".format(thrust, key, key, thrust))
 
         res.append(temp)
-        #print("{}:".format(key))
-        #print(res[key])
-    
+        # print("{}:".format(key))
+        # print(res[key])
+
     return np.asarray(res)
+
 
 ## Scales down the whole array to be under the given percentage (default, 80% thrust)
 def scaleDown(arry, thresh=0.8):
@@ -73,28 +75,30 @@ def scaleDown(arry, thresh=0.8):
         scale = thresh / biggest
         arry = arry * scale
         pp(arry)
-    
+
     return arry
+
 
 ## Runs the simple calculation to check what the combined output should be
 def calculateSimple(desired, order=["X", "Y", "Z", "Roll", "Pitch", "Yaw"]):
     vecDict = {}
     vecMask = {}
-    
+
     masks = getMasks(order=order)
 
     for i in range(len(desired)):
         key = order[i]
         vecDict[key] = desired[i]
 
-        #print(key)
-        #print(masks[i])
+        # print(key)
+        # print(masks[i])
 
     ## Get the 8-vector controls from the masks against the 6-dof desired movement
     res = scaleDown(np.matmul(masks.transpose(), np.asarray(desired)), thresh=0.8)
     # print(res)
 
     return res
+
 
 if __name__ == "__main__":
     for i in range(6):
