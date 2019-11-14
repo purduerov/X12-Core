@@ -63,7 +63,7 @@ def writeToCan(packet, timesleep=1, bus=None, printOut=False):
 
         can_tx = can.Message(arbitration_id=cid, data=data, extended_id=False)
 
-        bus.send(can_tx)
+        bus.send(can_tx, timeout=0.001)
 
         if printOut:
             tst = "    {}:".format(cid)

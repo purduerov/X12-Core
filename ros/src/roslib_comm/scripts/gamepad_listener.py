@@ -6,14 +6,14 @@ from shared_msgs.msg import controller_msg
 
 
 def callback(data):
-    rospy.loginfo('we did it reddit')
+    rospy.loginfo('fuck')
     rospy.loginfo(rospy.get_caller_id() + "I heard %s", data)
 
 
 def listener():
-    rospy.init_node('downstream_sub', anonymous=True)
+    rospy.init_node('gp_listen', anonymous=True)
 
-    rospy.Subscriber('/downstream_data', controller_msg, callback)
+    rospy.Subscriber('gamepad_listener', controller_msg, callback)
 
     rospy.spin()
 
