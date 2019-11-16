@@ -5,6 +5,7 @@ import can
 import time
 import signal
 
+
 def getSignal(bus):
     def signal_handler(sig, frame):
         print("CTRL+C detected")
@@ -14,10 +15,12 @@ def getSignal(bus):
 
     return signal_handler
 
+
 def zeroOutThrusters(bus=None):
     a = mapThrusters([127] * 8)
 
     writeToCan(a, timesleep=0.0, bus=bus, printOut=True)
+
 
 def mapThrusters(can_pow, can_map=None, printOut=False):
     if can_map is None:
@@ -26,11 +29,11 @@ def mapThrusters(can_pow, can_map=None, printOut=False):
             0x202: [None, 3, 4, 7],
             0x203: [5, 6, None, 2]
         }
-    
+
     can_out = {}
-    
+
     for cid in can_map:
-        data = [0, 0, 0, 0] 
+        data = [0, 0, 0, 0]
         cur = can_map[cid]
 
         for el in cur:
@@ -38,7 +41,6 @@ def mapThrusters(can_pow, can_map=None, printOut=False):
                 data.append(can_pow[el])
             else:
                 data.append(127)
-
 
         if printOut:
             print("|{}|".format(cid))
@@ -49,6 +51,7 @@ def mapThrusters(can_pow, can_map=None, printOut=False):
         can_out[cid] = data
 
     return can_out
+
 
 def writeToCan(packet, timesleep=1, bus=None, printOut=False):
     if bus is None:
@@ -61,12 +64,12 @@ def writeToCan(packet, timesleep=1, bus=None, printOut=False):
         can_tx = can.Message(arbitration_id=cid, data=data, extended_id=False)
 
         bus.send(can_tx)
-        
+
         if printOut:
             tst = "    {}:".format(cid)
             for el in data:
                 tst += " {0:03}".format(int(el))
-            
+
             print(tst)
 
 
@@ -78,10 +81,10 @@ def mainLoop(timesleep=1, bound=5, increment=1, mid=127, channel='can0', bustype
     inc = increment
     offset = 0
     while True:
-        num = 127+offset
+        num = 127 + offset
         print("Thrusters setting to {}".format(num))
 
-        base = [num]*8
+        base = [num] * 8
 
         thrusts = mapThrusters(base)
 
@@ -91,9 +94,9 @@ def mainLoop(timesleep=1, bound=5, increment=1, mid=127, channel='can0', bustype
             inc = -increment
         elif offset <= -bound:
             inc = increment
-        
+
         offset += inc
-        
+
         time.sleep(timesleep)
 
     zeroOutThrusters(bus=can_bus)
@@ -101,6 +104,5 @@ def mainLoop(timesleep=1, bound=5, increment=1, mid=127, channel='can0', bustype
 
 if __name__ == "__main__":
     bound = 10 * 5
-    inc = 1 
+    inc = 1
     print(mainLoop(bound=bound, increment=inc, timesleep=.04))
-    

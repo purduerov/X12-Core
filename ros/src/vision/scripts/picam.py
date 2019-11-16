@@ -7,5 +7,3 @@ camera.start_preview()
 
 while True:
     time.sleep(0.1)
-    
-    
