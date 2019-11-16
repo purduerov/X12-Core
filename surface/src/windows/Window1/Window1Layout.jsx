@@ -6,31 +6,42 @@ import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
 import {Row, Col, Container, Button} from 'react-bootstrap';
 import Camera from '../../components/Camera/Camera.jsx';
+import CameraController from '../../components/Camera/CameraController.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
 
 import defaultStore from '../../store/defaults.json';
-import { STORE_UPDATED } from '../../constants';
+import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
 
 
 export default class Window1Layout extends Component {
 	constructor(props){
 		super(props);
-		this.state = defaultStore;
+		this.state = {
+			activeCamera: 0
+		};
+
+		this.changeCamera = this.changeCamera.bind(this);
 	}
 
+	changeCamera(newCamera) {
+		this.setState({
+			activeCamera: newCamera
+		});
+	}
 	render() {
 		return (
 			<Container fluid style={{padding: '0'}}>
 				<Titlebar title='Purdue ROV Primary Screen' />
 				<Row noGutters='true' style={{height: '94%'}}>
 					<Col style={{padding: '.5rem'}}>
-						<ControlColumn/>
+						<ControlColumn>		
+						</ControlColumn>
 					</Col>
 					<Col xs={6}>
 						<Row noGutters='true' style={{height: '70%', padding: '.5rem'}}>
 							<Col>
 								<ControlColumn>
-									<Camera></Camera>
+									<Camera activeCamera={this.state.activeCamera}></Camera>
 								</ControlColumn>
 							</Col>
 						</Row>
@@ -42,7 +53,6 @@ export default class Window1Layout extends Component {
 							</Col>
 							<Col style={{padding: '.5rem', maxWidth: '50%'}}>
 								<ControlColumn>
-									{`GamepadSampleData ${this.state.gamepad.sampleData}`}
 								</ControlColumn>
 							</Col>
 						</Row>

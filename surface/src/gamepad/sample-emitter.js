@@ -1,7 +1,24 @@
-let number = 0;
+const EventEmitter = require('events');
 
-setInterval(() => {
-	process.send({
-		sampleData: ++number
-	});
-}, 200);
+const { SAMPLE_UPDATE } = require('../constants');
+
+class Sample extends EventEmitter {
+	constructor() {
+		super();
+
+		this.number = 0;
+
+		setInterval(() => {
+			this.number++;
+			this.update();
+		}, 200);
+
+		this.update.bind(this);
+	}
+
+	update() {
+		this.emit(SAMPLE_UPDATE);
+	}
+}
+
+module.exports.sample = new Sample();

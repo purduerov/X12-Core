@@ -1,0 +1,22 @@
+[
+	{
+		"name": "Camera 1",
+		"highres": "assets/images/one.jpg",
+		"lowres": "assets/images/one.jpg"
+	},
+	{
+		"name": "Camera 2",
+		"highres": "assets/images/two.jpg",
+		"lowres": "assets/images/two.jpg"
+	},
+	{
+		"name": "Camera 3",
+		"highres": "assets/images/three.png",
+		"lowres": "assets/images/three.png"
+	},
+	{
+		"name": "Camera 4",
+		"highres": "assets/images/four.jpg",
+		"lowres": "assets/images/four.jpg"
+	}
+]
