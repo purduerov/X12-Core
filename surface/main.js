@@ -15,6 +15,7 @@ const windowFiles = [
 	'dist/Window2.html'
 ];
 
+const camStream = spawn('python', ['src/cv/main.py']);
 
 let windows = [];
 let calIdx = 0;
@@ -80,17 +81,14 @@ app.on('ready', () => {
 		stdio: ['ignore', 'ignore', 'ignore', 'ipc']
 	});
 
-	sampleEmitter.on('message', data => {
+	sampleEmitter.on('message', data => {	
 		store.updateGamepad(data);
 
 	});
 
-	//const camStream = spawn('python', ['src/cv/main.py']);
-	/*
 	camStream.stdout.on('data', (data) => {
 		console.log(data);
 	});
-	*/
 
 	store.on(STORE_UPDATED, newStore => {
 		windows[0].webContents.send(STORE_UPDATED, newStore);
@@ -178,6 +176,10 @@ app.on('activate', () => {
 	if (windows[1] === null) {
 		createWindow(1);
 	}
+});
+
+app.on('before-quit', () => {
+	camStream.kill('SIGINT');
 });
 
 
