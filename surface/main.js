@@ -142,6 +142,7 @@ app.on('ready', () => {
 	
 	gamepad.on('message', (data) => {
 		store.updateGamepadState(data);
+		console.clear();
 		console.log(data);
 		publish(data);
 	});

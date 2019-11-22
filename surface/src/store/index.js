@@ -20,8 +20,6 @@ class Store extends EventEmitter {
 
 	async storeUpdated() {
 		try {
-			const yup = await this.validateStore(this.data);
-			if (!yup) throw yup;
 
 			this.emit(STORE_UPDATED, this.data);
 			
@@ -33,8 +31,6 @@ class Store extends EventEmitter {
 
 	async gamepadUpdated(){
 		try {
-			const yup = await this.validateStore(this.data);
-			if (!yup) throw yup;
 
 			this.emit(GAMEPAD_STATE_UPDATED, this.data);
 			
