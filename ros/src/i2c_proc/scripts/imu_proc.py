@@ -37,28 +37,27 @@ class dummyIMU():
             },
             'temp': 0,  # Good enough
         }
-try:
-    imu = BNO055();
-except:
-    print "no sensor found"
-    imu = dummyIMU();
+#try:
+imu = BNO055();
+#except:
+#    print "no sensor found"
+#    imu = dummyIMU();
 
 
 
-def reset_imu(msg):
+def _reset_imu(msg):
     global imu
     global PITCH_OFFSET
     global ROLL_OFFSET
     global YAW_OFFSET
-
+    print "message recieved"
     if msg.data:
-        PITCH_OFFSET = imu.data['euler']['pitch'];
-        ROLL_OFFSET = imu.data['euler']['roll'];
-        YAW_OFFSET = imu.data['euler']['yaw'];
+        PITCH_OFFSET = imu.pitch();
+        ROLL_OFFSET = imu.roll();
+        YAW_OFFSET = imu.yaw();
 
 
 if __name__ == "__main__":
-    global imu
     rospy.init_node('imu_proc')
 
     # Publish to the CAN hardware transmitter
@@ -66,15 +65,15 @@ if __name__ == "__main__":
                           queue_size=1)
 
     sub = rospy.Subscriber('reset_imu', Bool,
-                           reset_imu)
+                           _reset_imu)
 
-    rate = rospy.Rate(10)  # 10hz
+    rate = rospy.Rate(50)  # 10hz
     while not rospy.is_shutdown():
         if imu.update():
             out_message = imu_msg()
             imu_data = imu.data
-            out_message.euler = [imu_data['euler']['pitch'] - PITCH_OFFSET, imu_data['euler']['yaw'] - YAW_OFFSET, imu_data['euler']['roll'] - ROLL_OFFSET]
+            out_message.gyro = [imu.pitch() - PITCH_OFFSET, imu.yaw() - YAW_OFFSET, imu.roll() - ROLL_OFFSET]
             out_message.accel = [imu.acceleration_x(), imu.acceleration_y(), imu.acceleration_z()]
             pub.publish(out_message)
-
+    rate.sleep()
 
