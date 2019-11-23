@@ -6,10 +6,8 @@ int8 a
 int8 b
 int8 x
 int8 y
-int8 left
-int8 right
-int8 up
-int8 down
+int8 DPadX
+int8 DPadY
 int8 RB
 int8 LB
 float32 Rtrigger
