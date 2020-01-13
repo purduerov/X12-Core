@@ -4,12 +4,11 @@
   "description": "Package concerned with the pilot interface and dataflow on the surface side.",
   "main": "main.js",
   "scripts": {
-    "test": "npm test",
-    "start": "webpack-dev-server --open --hot --mode development",
-    "build": "webpack --mode production",
-    "webpack-watch": "webpack -w --mode development",
+    "webpack-start": "webpack-dev-server --open --hot --mode development",
+    "webpack-build": "webpack --mode production",
+		"webpack-watch": "webpack -w --mode development",
+		"electron": "electron .",
     "electron-watch": "NODE_ENV=WATCH electron .",
-    "electron": "electron .",
     "electron-rebuild": "electron-rebuild -w opencv4nodejs"
   },
   "repository": {

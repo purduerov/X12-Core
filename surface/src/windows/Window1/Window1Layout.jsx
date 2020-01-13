@@ -17,10 +17,16 @@ export default class Window1Layout extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			activeCamera: 0
+			activeCamera: 0,
+			sampleRemoteUpdate: 0
 		};
 
 		this.changeCamera = this.changeCamera.bind(this);
+
+		const sample = require('electron').remote.require('./src/gamepad/sample-emitter.js').sample;
+		sample.on(SAMPLE_UPDATE, () => {
+			this.setState({ sampleRemoteUpdate: sample.number });
+		});
 	}
 
 	changeCamera(newCamera) {
@@ -53,6 +59,7 @@ export default class Window1Layout extends Component {
 							</Col>
 							<Col style={{padding: '.5rem', maxWidth: '50%'}}>
 								<ControlColumn>
+									electron.remote example: { this.state.sampleRemoteUpdate }
 								</ControlColumn>
 							</Col>
 						</Row>
