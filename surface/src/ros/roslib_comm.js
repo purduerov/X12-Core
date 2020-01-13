@@ -59,6 +59,12 @@ module.exports = function(data) {
     b: data.B ? data.B : 0,
     x: data.X ? data.X : 0,
     y: data.Y ? data.Y : 0,
+    left: data.DPADL ? data.DPADL : 0,
+    right: data.DPADR ? data.DPADR : 0,
+    up: data.DPADTOP ? data.DPADTOP : 0,
+    down: data.DPADBTM ? data.DPADBTM : 0,
+    RB: data.RB ? data.RB : 0,
+    LB: data.LB ? data.LB : 0,
     Rtrigger: data.RT ? data.RT : 0,
     Ltrigger: data.LT ? data.LT : 0
   }); 

@@ -3,8 +3,8 @@
         <node name="can_node" pkg="can_com" type="can_bus.py"/>
         <node name="thrust_proc" pkg="can_proc" type="thrust_proc.py"/>
         <node name="tool_proc" pkg="can_proc" type="tool_proc.py"/>
-        <node name="thrust_controller" pkg="control" type="thrust_controller.py"/>
-        <node name="i2c_node" pkg="i2c_com" type="i2c.py"/>
+        <node name="ROV_main" pkg="control" type="ROV_main.py"/>
+        <node name="imu" pkg="i2c_proc" type="imu_proc.py"/>
         <node name="thrust_control" pkg="control" type="thrust_control.py"/>
     </group>
 
