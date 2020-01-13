@@ -2,3 +2,5 @@ ros/devel
 ros/build
 .idea/
 
+# for the macOS bros
+.DS_Store
