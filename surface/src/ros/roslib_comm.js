@@ -17,27 +17,26 @@ ros.on('close', function() {
     console.log('Connection to websocket server closed.');
 });
 
-const cmdVel = new ROSLIB.Topic({
-  ros : ros,
-  name : 'gamepad_listener',
-  messageType : 'shared_msgs/controller_msg'//'geometry_msgs/Twist'//'shared_msgs/controller_msg'
-});
 
-const twist = new ROSLIB.Message({
-  linear : {
-    x : 0.1,
-    y : 0.2,
-    z : 0.3
-  },
-  angular : {
-    x : -0.1,
-    y : -0.2,
-    z : -0.3
-  }
+/*var upstream = new ROSLIB.Topic({ //for subscribing
+  ros : ros,
+  name : '/upstream_data',
+  messageType : 'std_msgs/Twist'
+}); */
+
+/*upstream.subscribe(function(message) {
+  console.log('Received message on ' + upstream.name + ': ' + message.data);
+}); */
+
+
+const cmdVel = new ROSLIB.Topic({ //for publishing
+  ros : ros,
+  name : '/downstream_data',
+  messageType : 'shared_msgs/controller_msg'//'geometry_msgs/Twist'
 });
 
 module.exports = function(data) {
-
+  /*
   const twist = new ROSLIB.Message({
     linear : {
       x : 0.1,
@@ -49,8 +48,7 @@ module.exports = function(data) {
       y : -0.2,
       z : -0.3
     }
-  });
-
+  }); for testing purposes*/
 
   const packet = new ROSLIB.Message({
     RX_axis: data.RSX ? data.RSX : 0,
@@ -61,6 +59,12 @@ module.exports = function(data) {
     b: data.B ? data.B : 0,
     x: data.X ? data.X : 0,
     y: data.Y ? data.Y : 0,
+    left: data.DPADL ? data.DPADL : 0,
+    right: data.DPADR ? data.DPADR : 0,
+    up: data.DPADTOP ? data.DPADTOP : 0,
+    down: data.DPADBTM ? data.DPADBTM : 0,
+    RB: data.RB ? data.RB : 0,
+    LB: data.LB ? data.LB : 0,
     Rtrigger: data.RT ? data.RT : 0,
     Ltrigger: data.LT ? data.LT : 0
   }); 

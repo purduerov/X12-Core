@@ -29,7 +29,7 @@ class Complex_2():
     # Each column is X, Y, Z: X is forward/back, Y is left/right, Z is up/down
     X11_THRUSTERS = np.matrix([
         [6.7593, 6.7593, -6.7593, -6.7593, 7.6887, 7.6887, 7.6887, -7.6887, -7.6887, -7.6887],
-		[-6.625, 6.625, -6.625, 6.625, -3.75, 0, 3.75, -3.75, 0, 3.75],
+        [-6.625, 6.625, -6.625, 6.625, -3.75, 0, 3.75, -3.75, 0, 3.75],
         [-0.5809, -0.5809, -0.5809, -0.5809, 4.8840, 4.8840, 4.8840, 4.8840, 4.8840, 4.8840]
     ]) * 0.0254
 
@@ -64,8 +64,8 @@ class Complex_2():
         self.disabled = [False for col in range(len_list)]
         # The last thrust map returned by the calculate function
         self.map = None
-        
-        #initialize thrust and power vectors, and total power value
+
+        # initialize thrust and power vectors, and total power value
         self.thrust = np.matrix(np.zeros(len_list))
         self.power = np.matrix(np.zeros(len_list))
         self.final_power = 0.0
@@ -85,13 +85,13 @@ class Complex_2():
             self.disabled = disabled_thrusters
             self._generate_matrix()
 
-        #print desired_thrust
+        # print desired_thrust
 
         self.map = self.pseudo_inverse_matrix.dot(desired_thrust)
 
         self._normalize(desired_thrust)
         initial_power, limitPower = self._calc_thrust_power(self.map)
-        #limit power if necessary:
+        # limit power if necessary:
         self.final_power = initial_power
         iteration = 0
         while limitPower == 1 and disable_limiting == False:
@@ -124,11 +124,11 @@ class Complex_2():
         """
         max_val = np.amax(np.abs(self.map))
         if max_val == 0:
-             max_val = 1
+            max_val = 1
 
         max_force = np.amax(np.abs(desired_thrust))
-        
-        self.map *= (max_force/max_val)
+
+        self.map *= (max_force / max_val)
 
     def _limit_power(self, initialPower):
         """
@@ -136,7 +136,7 @@ class Complex_2():
         :return: limitedPower
         """
         limitedPower = 0.0
-        #initialize maxPower as lowest power value
+        # initialize maxPower as lowest power value
         maxPower = 0.51
         maxPowerIndex = 0
         num_thrusters = len(self.disabled)
@@ -160,7 +160,8 @@ class Complex_2():
                     self.map[0, thruster] = self.map[0, thruster] - 0.005
                     overMaxPower[0, thruster] = 1
             if thruster == maxPowerIndex:
-                self.thrust[0, maxPowerIndex] = self._power_to_thrust(self._pwm_to_power(self.map[0, thruster]), orig_thrust_maxP)
+                self.thrust[0, maxPowerIndex] = self._power_to_thrust(self._pwm_to_power(self.map[0, thruster]),
+                                                                      orig_thrust_maxP)
         # change thrust values to
         for thruster in range(num_thrusters):
             if thruster != maxPowerIndex:
@@ -197,9 +198,9 @@ class Complex_2():
         :return: Thrust Value (lbf)
         """
         if pwm < -0.05:
-            thrustVal = -3.6529*(pwm**3)-9.8279*(pwm**2)+0.5183*pwm-0.04
+            thrustVal = -3.6529 * (pwm ** 3) - 9.8279 * (pwm ** 2) + 0.5183 * pwm - 0.04
         elif pwm > 0.05:
-            thrustVal = -5.9996*(pwm**3)+13.296*(pwm**2)+0.4349*pwm+0.0345
+            thrustVal = -5.9996 * (pwm ** 3) + 13.296 * (pwm ** 2) + 0.4349 * pwm + 0.0345
         else:
             thrustVal = 0
         return thrustVal
@@ -210,9 +211,9 @@ class Complex_2():
         :return: Power Value (W)
         """
         if pwm < 0:
-            powerVal = -53.282*(pwm**3)+135.58*(pwm**2)+1.1986*pwm+0.51
+            powerVal = -53.282 * (pwm ** 3) + 135.58 * (pwm ** 2) + 1.1986 * pwm + 0.51
         else:
-            powerVal = 35.949*(pwm**3)+150.51*(pwm**2)-3.0096*pwm+0.51
+            powerVal = 35.949 * (pwm ** 3) + 150.51 * (pwm ** 2) - 3.0096 * pwm + 0.51
         return powerVal
 
     def _power_to_thrust(self, powerVal, sign):
@@ -222,9 +223,9 @@ class Complex_2():
         :return: thrust value (lbf)
         """
         if sign > 0:
-            thrustVal = 0.000001*(powerVal**3)-0.0004*(powerVal**2)+0.0855*powerVal
+            thrustVal = 0.000001 * (powerVal ** 3) - 0.0004 * (powerVal ** 2) + 0.0855 * powerVal
         elif sign < 0:
-            thrustVal = -0.0000008*(powerVal**3)+0.0003*(powerVal**2)-0.0697*powerVal
+            thrustVal = -0.0000008 * (powerVal ** 3) + 0.0003 * (powerVal ** 2) - 0.0697 * powerVal
         else:
             thrustVal = 0
         return thrustVal
@@ -235,9 +236,9 @@ class Complex_2():
         :return: power value (W)
         """
         if thrustVal < 0:
-            powerVal = 2.3329*(thrustVal**2)-12.016*thrustVal+0.0959
+            powerVal = 2.3329 * (thrustVal ** 2) - 12.016 * thrustVal + 0.0959
         if thrustVal > 0:
-            powerVal = 1.8977*(thrustVal**2)+8.37*thrustVal+1.2563
+            powerVal = 1.8977 * (thrustVal ** 2) + 8.37 * thrustVal + 1.2563
         else:
             powerVal = 0.51
         return powerVal
@@ -248,9 +249,9 @@ class Complex_2():
         :return: PWM value
         """
         if thrustVal < 0:
-            pwm = 0.0021*(thrustVal**3)+0.0298*(thrustVal**2)+0.2426*thrustVal-0.0775
+            pwm = 0.0021 * (thrustVal ** 3) + 0.0298 * (thrustVal ** 2) + 0.2426 * thrustVal - 0.0775
         elif thrustVal > 0:
-            pwm = 0.0017*(thrustVal**3)-0.025*(thrustVal**2)+0.213*thrustVal+0.0675
+            pwm = 0.0017 * (thrustVal ** 3) - 0.025 * (thrustVal ** 2) + 0.213 * thrustVal + 0.0675
         else:
             # assume 0 even though dead band has range of pwm values
             pwm = 0

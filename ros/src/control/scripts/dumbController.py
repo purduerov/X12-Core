@@ -2,10 +2,11 @@
 import rospy
 import time
 from shared_msgs.msg import controller_msg
+
 if __name__ == "__main__":
     rospy.init_node("dumb_controller")
-    pub = rospy.Publisher("/surface/controller",controller_msg, queue_size = 2)
-    while(True):
+    pub = rospy.Publisher("/surface/controller", controller_msg, queue_size=2)
+    while (True):
         time.sleep(.1)
         m = controller_msg()
 
@@ -15,14 +16,13 @@ if __name__ == "__main__":
         t = float(input("give and Throttle value:"))
         rt = float(input("give a Right trigger value"))
         lt = float(input("give a Left trigger value"))
-        m.X_axis = x
-        m.Y_axis = y
-        m.Z_axis = z
-        m.throttle = t
+        m.RX_axis = x
+        m.RY_axis = y
+        m.LX_axis = z
+        m.LY_axis = t
         m.Rtrigger = rt
         m.Ltrigger = lt
         pub.publish(m)
         print(m)
         print("-----------published------------")
         print("-----press ctrl-z to exit-------")
-

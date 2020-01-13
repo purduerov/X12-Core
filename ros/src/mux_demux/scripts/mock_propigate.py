@@ -8,25 +8,25 @@ import random
 
 mock = thrust_command_msg()
 
+
 def mock_catch(msg):
-  global mock
-  mock = msg
+    global mock
+    mock = msg
+
 
 if __name__ == "__main__":
     rospy.init_node('mock_prop')
-    ns = rospy.get_namespace() # This should return /surface
+    ns = rospy.get_namespace()  # This should return /surface
 
     status_sub = rospy.Subscriber(ns + 'thrust_mock',
-        thrust_command_msg, mock_catch)
+                                  thrust_command_msg, mock_catch)
 
     # Publishers out onto the ROS System
     thrust_pub = rospy.Publisher(ns + 'thrust_command',
-      thrust_command_msg, queue_size=10)
+                                 thrust_command_msg, queue_size=10)
 
-    rate = rospy.Rate(50) # 50hz
+    rate = rospy.Rate(50)  # 50hz
     # TODO: I2C related activities
     while not rospy.is_shutdown():
-      thrust_pub.publish(mock)
-      rate.sleep()
-      
-
+        thrust_pub.publish(mock)
+        rate.sleep()

@@ -5,6 +5,7 @@ import signal
 import json
 import sys
 
+
 def interrupt_handler(bttn, axis, fileout="gp_params.json"):
     def signal_handler(sig, frame):
         print("Ctrl+C sensed!")
@@ -14,8 +15,9 @@ def interrupt_handler(bttn, axis, fileout="gp_params.json"):
 
         print("File written, closing")
         sys.exit(0)
-    
+
     return signal_handler
+
 
 def main():
     """Just print out some event infomation when the gamepad is used."""
@@ -32,24 +34,24 @@ def main():
             if event.ev_type == "Absolute":
                 if event.code not in axis:
                     axis[event.code] = {"val": 0, "max": 0, "min": 0}
-                
+
                 axis[event.code]["val"] = event.state
-                
+
                 if event.state > axis[event.code]["max"]:
                     axis[event.code]["max"] = event.state
-                
+
                 if event.state < axis[event.code]["min"]:
                     axis[event.code]["min"] = event.state
 
             elif event.ev_type == "Key":
                 if event.code not in bttn:
                     bttn[event.code] = {"val": 0, "max": 0, "min": 0}
-                
+
                 bttn[event.code]["val"] = event.state
-                
+
                 if event.state > bttn[event.code]["max"]:
                     bttn[event.code]["max"] = event.state
-                
+
                 if event.state < bttn[event.code]["min"]:
                     bttn[event.code]["min"] = event.state
 
