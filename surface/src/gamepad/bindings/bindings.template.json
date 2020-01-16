@@ -1,0 +1,27 @@
+{
+	"binary": {
+		"X": null,
+		"Y": null,
+		"A": null,
+		"B": null,
+		"RB": null,
+		"LB": null,
+		"RSZ": null,
+		"LSZ": null,
+		"XBOX": null,
+		"MENU": null,
+		"START": null,
+		"DPADR": null,
+		"DPADL": null,
+		"DPADTOP": null,
+		"DPADBTM": null
+	},
+	"continuous": {
+		"RT": null,
+		"LT": null,
+		"RSX": null,
+		"RSY": null,
+		"LSX": null,
+		"LSY": null
+	}
+}
