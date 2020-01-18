@@ -49,6 +49,6 @@ if __name__ == "__main__":
 
         depth_sens.update()
         depth_message = depth_msg()
-        depth_message.depth = {depth_sens.depth()}
+        depth_message.pressure = depth_sens.depth()
         depth_pub.publish(depth_message)
         rate.sleep()

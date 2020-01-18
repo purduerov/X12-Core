@@ -38,7 +38,7 @@ class dummyIMU():
             'temp': 0,  # Good enough
         }
 #try:
-imu = BNO055();
+
 #except:
 #    print "no sensor found"
 #    imu = dummyIMU();
@@ -58,8 +58,9 @@ def _reset_imu(msg):
 
 
 if __name__ == "__main__":
+    global imu
     rospy.init_node('imu_proc')
-
+    imu = BNO055()
     # Publish to the CAN hardware transmitter
     pub = rospy.Publisher('imu', imu_msg,
                           queue_size=1)
