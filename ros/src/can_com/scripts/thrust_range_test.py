@@ -25,7 +25,7 @@ def zeroOutThrusters(bus=None):
 def mapThrusters(can_pow, can_map=None, printOut=False):
     if can_map is None:
         can_map = {
-            0x201: [None, 0, 1, None],
+            0x201: [1, 0, None, None],
             0x202: [None, 3, 4, 7],
             0x203: [5, 6, None, 2]
         }
@@ -103,6 +103,6 @@ def mainLoop(timesleep=1, bound=5, increment=1, mid=127, channel='can0', bustype
 
 
 if __name__ == "__main__":
-    bound = 10 * 5
+    bound = 10 * 4
     inc = 1
     print(mainLoop(bound=bound, increment=inc, timesleep=.04))

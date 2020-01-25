@@ -89,7 +89,7 @@ if __name__ == "__main__":
     pub = rospy.Publisher('can_tx', can_msg,
                           queue_size=100)
 
-    sub = rospy.Subscriber('/surface/tools_command', tools_command_msg,
+    sub = rospy.Subscriber('/tools_proc', tools_command_msg,
                            message_received)
 
     # rate = rospy.Rate(5) # 5hz
