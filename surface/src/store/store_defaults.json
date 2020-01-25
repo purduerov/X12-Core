@@ -1,5 +1,6 @@
 {
 	"gamepad": {
+		"binding": "default_binding",
 		"state": {
 			"X": 0,
 			"Y": 0,

@@ -1,6 +1,15 @@
 {
   "version": "0.2.0",
   "configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Gamepad",
+			"program": "${workspaceFolder}/src/gamepad/gamepad_test.js",
+			"skipFiles": [
+				"<node_internals>/**"
+			]
+		},
     {
       "name": "Debug Main Process",
       "type": "node",
@@ -10,7 +19,7 @@
       "windows": {
         "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
       },
-      "args" : ["."],
+			"args" : ["."],
 			"outputCapture": "std",
 			"env": {"NODE_ENV": "WATCH"}
     }
