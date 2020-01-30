@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Row, Container } from 'react-bootstrap';
 
 import CameraFrame from './CameraFrame.jsx';
-import CameraConfig from '../../config/camera.json';
+import CameraConfig from './camera.json';
 
 export default class Camera extends React.Component {
 	constructor(props) {

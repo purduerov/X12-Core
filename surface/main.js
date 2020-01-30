@@ -1,12 +1,22 @@
 const { app } = require('electron');
-const { createWindow, activateReload } = require('./src/electron');
+const {
+	createWindow,
+	activateReload,
+	setupGamepad
+} = require('./src/electron');
+setupGamepad();
+
 const { WATCH_MODE } = require('./src/electron').config;
 
 let windows = [];
 
+
 app.on('ready', () => {
 	createWindow(windows, 0);
 	// createWindow(windows, 1);
+
+	setupGamepad();
+	
 });
 
 app.on('window-all-closed', () => {
