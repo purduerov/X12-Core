@@ -210,3 +210,17 @@ class ThrustMapper():
 
 	def thrustToTotalForce(self, thrust):
 		return np.matmul(self.thrusterForceMap, thrust)
+
+	# Blindly copied from Complex_1. Check these values at some point please
+	def thrustToPWM(self, thrustVal):
+		if thrustVal < 0:
+		    pwm = 0.0021 * (thrustVal ** 3) + 0.0298 * (thrustVal ** 2) + 0.2426 * thrustVal - 0.0775
+		elif thrustVal > 0:
+		    pwm = 0.0017 * (thrustVal ** 3) - 0.025 * (thrustVal ** 2) + 0.213 * thrustVal + 0.0675
+		else:
+		    # assume 0 even though dead band has range of pwm values
+		    pwm = 0
+		return pwm
+
+	def thrustVectorToPWM(self, thrustVector):
+		return list(thrustToPWM(i) for i in thrustVector

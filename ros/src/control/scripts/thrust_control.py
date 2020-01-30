@@ -5,6 +5,7 @@ from sensor_msgs.msg import Imu
 from std_msgs.msg import Float32
 import numpy as np
 import Complex_1
+import thrust_mapping
 
 desired_p = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 desired_p_unramped = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -50,7 +51,8 @@ def on_loop():
         desired_thrust_final[i] = desired_p[i]
 
     # calculate thrust
-    pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
+    #pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
+    pwm_values = tm.calculateThrusterOutput(desired_thrust_final)
     # invert relevant values
     # for i in range(8):
     #   if inverted_list[i] == 1:
@@ -97,7 +99,8 @@ if __name__ == "__main__":
                                  thrust_status_msg, queue_size=10)
 
     # define variable for class Complex to allow calculation of thruster pwm values
-    c = Complex_1.Complex()
+    #c = Complex_1.Complex()
+    tm = thrust_mapping.ThrustMapper()
     desired_thrust_final = [0, 0, 0, 0, 0, 0]
 
     while not rospy.is_shutdown():
