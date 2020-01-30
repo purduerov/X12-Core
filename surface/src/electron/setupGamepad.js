@@ -1,5 +1,5 @@
 const { spawn } = require('child_process');
-const store = require('./src/store/store.js');
+const store = require('../store/store.js');
 const { GAMEPAD_BINDING_UPDATED, GAMEPAD_SENDING_DATA } = require('../constants');
 
 module.exports = function setupGamepad() {

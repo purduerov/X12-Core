@@ -4,8 +4,11 @@ const {
 	activateReload,
 	setupGamepad
 } = require('./src/electron');
-const runGamepad = require('./src/gamepad/rungamepad.js');
-setupGamepad();
+// const runGamepad = require('./src/gamepad/rungamepad.js');
+const spawn = require('child_process').spawn;
+const JSONStream = require('JSONStream');
+const store = require('./src/store/store.js');
+const { GAMEPAD_STATE_UPDATED } = require('./src/constants');
 
 const { WATCH_MODE } = require('./src/electron').config;
 
@@ -16,8 +19,20 @@ app.on('ready', () => {
 	createWindow(windows, 0);
 	// createWindow(windows, 1);
 
-	// setupGamepad();
-	runGamepad();
+	// // setupGamepad();
+	// runGamepad();
+	const gamepad = spawn('python', [ './gamepad_test.py'], {
+		stdio: ['pipe', 'pipe', 'pipe']
+	});
+	
+	gamepad.on('exit', (err) => console.log('exit'));
+	
+	gamepad.stdout.pipe(JSONStream.parse())
+		.on('data', data => {
+			store.updateGamepadState(data);
+			console.log('got data');
+		});
+	store.on(GAMEPAD_STATE_UPDATED, data => console.log(data));
 	
 });
 

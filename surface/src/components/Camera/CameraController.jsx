@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, Col, Container } from 'react-bootstrap';
-import CameraConfig from '../../config/camera.json';
+import CameraConfig from './camera.json';
 
 
 export default class CameraController extends Component {

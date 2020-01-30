@@ -8,8 +8,6 @@ import {Row, Col, Container, Button} from 'react-bootstrap';
 import Camera from '../../components/Camera/Camera.jsx';
 import CameraController from '../../components/Camera/CameraController.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
-
-import defaultStore from '../../store/defaults.json';
 import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
 
 
@@ -22,11 +20,6 @@ export default class Window1Layout extends Component {
 		};
 
 		this.changeCamera = this.changeCamera.bind(this);
-
-		const sample = require('electron').remote.require('./src/gamepad/sample-emitter.js').sample;
-		sample.on(SAMPLE_UPDATE, () => {
-			this.setState({ sampleRemoteUpdate: sample.number });
-		});
 	}
 
 	changeCamera(newCamera) {
