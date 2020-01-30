@@ -7,6 +7,8 @@ from __future__ import print_function
 import inputs
 from time import time, sleep
 import threading
+import json
+import os
 
 EVENT_ABB = (
     # Joysticks
@@ -42,33 +44,53 @@ EVENT_ABB = (
 
 # This is to reduce noise from the PlayStation controllers
 # For the Xbox controller, you can set this to 0
+UPDATE_INTERVAL = 50
 MIN_ABS_DIFFERENCE = 0
 TRIGGER_DEAD_ZONE = 50
 TRIGGER_RANGE = 550
 STICK_DEAD_ZONE = 4000
 STICK_RANGE = 32768
 
-class JSTest(object):
+# actions
+PRINT = 'PRINT'
+SEND = 'SEND'
+stop_threads = False
+
+class GamepadTest(object):
     """Simple joystick test class."""
-    def __init__(self, gamepad=None, abbrevs=EVENT_ABB):
+    def __init__(self, gamepad=None, abbrevs=EVENT_ABB, action=PRINT):
+        self.action = action
+        self.print_thread = None
         self.btn_state = {}
         self.old_btn_state = {}
         self.abs_state = {}
         self.old_abs_state = {}
-        self.lastprint = gettime()
-        self.extraprint = False
+        self.lastprint = self.get_time()
+        self.finalprint = False
         self.abbrevs = dict(abbrevs)
         for key, value in self.abbrevs.items():
-            if key.startswith('Absolute'):
-                self.abs_state[value] = 0
-                self.old_abs_state[value] = 0
-            if key.startswith('Key'):
+            if key.startswith('Absolute') and not 'DPAD' in value:
+                self.abs_state[value] = 0.0
+                self.old_abs_state[value] = 0.0
+            elif key.startswith('Key'):
                 self.btn_state[value] = 0
                 self.old_btn_state[value] = 0
+            else:
+                self.abs_state[value] = 0
+                self.old_abs_state[value] = 0
         self._other = 0
         self.gamepad = gamepad
         if not gamepad:
             self._get_gamepad()
+
+    def get_time(self):
+        return round(time() * 1000) % 10000000
+
+    def interval_elapsed(self):
+        curtime = self.get_time()
+        elapsed = curtime - self.lastprint > UPDATE_INTERVAL
+        return elapsed
+    
 
     def _get_gamepad(self):
         """Get a gamepad object."""
@@ -76,24 +98,6 @@ class JSTest(object):
             self.gamepad = inputs.devices.gamepads[0]
         except IndexError:
             raise inputs.UnpluggedError("No gamepad found.")
-
-    def handle_unknown_event(self, event, key):
-        """Deal with unknown events."""
-        if event.ev_type == 'Key':
-            new_abbv = 'B' + str(self._other)
-            self.btn_state[new_abbv] = 0
-            self.old_btn_state[new_abbv] = 0
-        elif event.ev_type == 'Absolute':
-            new_abbv = 'A' + str(self._other)
-            self.abs_state[new_abbv] = 0
-            self.old_abs_state[new_abbv] = 0
-        else:
-            return None
-
-        self.abbrevs[key] = new_abbv
-        self._other += 1
-
-        return self.abbrevs[key]
 
     def correct_raw(self, raw, abbv):
         sign = (raw >= 0) * 2 - 1
@@ -130,12 +134,10 @@ class JSTest(object):
                 event.ev_type = 'Dpad'
         except KeyError:
             return
-
-        curtime = gettime()    
-        if curtime - self.lastprint > 50:
-        # if True:
-            self.lastprint = curtime
-            self.extraprint = False
+  
+        if self.interval_elapsed():
+            self.lastprint = self.get_time()
+            stop_threads = True;
             if event.ev_type == 'Key':
                 self.old_btn_state[abbv] = self.btn_state[abbv]
                 self.btn_state[abbv] = event.state
@@ -146,9 +148,9 @@ class JSTest(object):
                 self.old_abs_state[abbv] = self.abs_state[abbv]
                 self.abs_state[abbv] = self.correct_raw(event.state, abbv)
                 # self.abs_state[abbv] = event.state
-            self.output_state(event.ev_type, abbv)
-            printFinal = threading.Thread(target=self.print_state, args=(50,))
-            printFinal.start()          
+
+            return self.output_state(event.ev_type, abbv)
+
         else:
             if event.ev_type == 'Key':
                 self.btn_state[abbv] = event.state
@@ -158,17 +160,27 @@ class JSTest(object):
                 self.abs_state[abbv] = self.correct_raw(event.state, abbv)
                 # self.abs_state[abbv] = event.state
 
-    def print_state(self, wait=None):
-        """Format the state."""
-        if wait:
-            sleep(wait/1000)
-            if gettime() - self.lastprint < 50:
-                return
+    def do_action(self):
+        # if thread:
+        #     print('aaaaaaa')
+        #     while True:
+        #         if stop():
+        #             break
+        #         if get_time() 
+        #         self.lastprint = self.get_time()
 
+        if self.action == PRINT:
+            self.print_state()
+        elif self.action == SEND:
+            combined = {**self.abs_state, **self.btn_state}
+            print(json.dumps(combined));
+
+    def print_state(self):
+        """Format the state."""
 
         output_string = ""
         for key, value in self.abs_state.items():
-            output_string += key + ':' + '{:>8}'.format(str(value) + ' ')
+            output_string += key + ':' + '{:>7}'.format(str(value) + ' ')
 
         for key, value in self.btn_state.items():
             output_string += key + ':' + str(value) + ' '
@@ -180,33 +192,25 @@ class JSTest(object):
         """Print out the output state."""
         if ev_type == 'Key':
             if self.btn_state[abbv] != self.old_btn_state[abbv]:
-                self.print_state()
+                self.do_action()
+                return True
         else:
             if self.abs_state[abbv] != self.old_abs_state[abbv]:
-                self.print_state()
+                self.do_action()
+                return True
 
-    def process_events(self):
-        """Process available events."""
-        try:
-            events = self.gamepad.read()
-        except EOFError:
-            events = []
-        for event in events:
-            self.process_event(event)
-        
-        
-    
-
-
-def gettime():
-    return round(time() * 1000) % 10000000
 
 def main():
     """Process all events forever."""
-    
-    jstest = JSTest()
+    gptest = GamepadTest(action=SEND)
+    didPrint = False
     while 1:
-        jstest.process_events()
+        try:
+            events = gptest.gamepad.read()
+        except EOFError:
+            events = []
+        for event in events:
+            didPrint = gptest.process_event(event)
 
 
 if __name__ == "__main__":
