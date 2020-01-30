@@ -21,7 +21,7 @@ EVENT_ABB = (
     ('Absolute-ABS_Z', 'LT'),
     ('Absolute-ABS_RZ', 'RT'),
 
-    #DPad
+    # DPad
     ('Absolute-ABS_HAT0X', 'DPADX'),
     ('Absolute-ABS_HAT0Y', 'DPADY'),
 
@@ -56,8 +56,10 @@ PRINT = 'PRINT'
 SEND = 'SEND'
 stop_threads = False
 
+
 class GamepadTest(object):
     """Simple joystick test class."""
+
     def __init__(self, gamepad=None, abbrevs=EVENT_ABB, action=PRINT):
         self.action = action
         self.print_thread = None
@@ -90,7 +92,6 @@ class GamepadTest(object):
         curtime = self.get_time()
         elapsed = curtime - self.lastprint > UPDATE_INTERVAL
         return elapsed
-    
 
     def _get_gamepad(self):
         """Get a gamepad object."""
@@ -111,15 +112,14 @@ class GamepadTest(object):
             value_range = STICK_RANGE
 
         if raw < dead_zone:
-            return 0.0;
-        
-        raw -= dead_zone;
+            return 0.0
+
+        raw -= dead_zone
         raw *= value_range / (value_range - dead_zone)
         raw = 1.0 if raw > value_range else raw / value_range
         corrected = round(raw, 3)
         corrected *= sign
         return corrected
-
 
     def process_event(self, event):
         """Process the event into a state."""
@@ -134,10 +134,9 @@ class GamepadTest(object):
                 event.ev_type = 'Dpad'
         except KeyError:
             return
-  
+
         if self.interval_elapsed():
             self.lastprint = self.get_time()
-            stop_threads = True;
             if event.ev_type == 'Key':
                 self.old_btn_state[abbv] = self.btn_state[abbv]
                 self.btn_state[abbv] = event.state
@@ -166,14 +165,14 @@ class GamepadTest(object):
         #     while True:
         #         if stop():
         #             break
-        #         if get_time() 
+        #         if get_time()
         #         self.lastprint = self.get_time()
 
         if self.action == PRINT:
             self.print_state()
         elif self.action == SEND:
             combined = {**self.abs_state, **self.btn_state}
-            print(json.dumps(combined));
+            print(json.dumps(combined))
 
     def print_state(self):
         """Format the state."""
@@ -203,14 +202,13 @@ class GamepadTest(object):
 def main():
     """Process all events forever."""
     gptest = GamepadTest(action=SEND)
-    didPrint = False
     while 1:
         try:
             events = gptest.gamepad.read()
         except EOFError:
             events = []
         for event in events:
-            didPrint = gptest.process_event(event)
+            gptest.process_event(event)
 
 
 if __name__ == "__main__":

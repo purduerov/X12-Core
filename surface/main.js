@@ -4,6 +4,7 @@ const {
 	activateReload,
 	setupGamepad
 } = require('./src/electron');
+const runGamepad = require('./src/gamepad/rungamepad.js');
 setupGamepad();
 
 const { WATCH_MODE } = require('./src/electron').config;
@@ -15,7 +16,8 @@ app.on('ready', () => {
 	createWindow(windows, 0);
 	// createWindow(windows, 1);
 
-	setupGamepad();
+	// setupGamepad();
+	runGamepad();
 	
 });
 
