@@ -223,4 +223,4 @@ class ThrustMapper():
 		return pwm
 
 	def thrustVectorToPWM(self, thrustVector):
-		return list(thrustToPWM(i) for i in thrustVector
+		return list(self.thrustToPWM(i) for i in thrustVector)
