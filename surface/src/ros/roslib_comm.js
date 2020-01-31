@@ -18,15 +18,15 @@ ros.on('close', function() {
 });
 
 
-/*var upstream = new ROSLIB.Topic({ //for subscribing
+var upstream = new ROSLIB.Topic({ //for subscribing
   ros : ros,
   name : '/upstream_data',
-  messageType : 'std_msgs/Twist'
-}); */
+  messageType : 'geometry_msgs/Twist'
+}); 
 
-/*upstream.subscribe(function(message) {
-  console.log('Received message on ' + upstream.name + ': ' + message.data);
-}); */
+upstream.subscribe(function(message) {
+  console.log('Received message on ' + upstream.name + ': ' + message.linear.x);
+}); 
 
 
 const cmdVel = new ROSLIB.Topic({ //for publishing
@@ -59,10 +59,8 @@ module.exports = function(data) {
     b: data.B ? data.B : 0,
     x: data.X ? data.X : 0,
     y: data.Y ? data.Y : 0,
-    left: data.DPADL ? data.DPADL : 0,
-    right: data.DPADR ? data.DPADR : 0,
-    up: data.DPADTOP ? data.DPADTOP : 0,
-    down: data.DPADBTM ? data.DPADBTM : 0,
+    DPadX: data.DPADL ? data.DPADL : 0,
+    DPadY: data.DPADR ? data.DPADR * -1 : 0,
     RB: data.RB ? data.RB : 0,
     LB: data.LB ? data.LB : 0,
     Rtrigger: data.RT ? data.RT : 0,

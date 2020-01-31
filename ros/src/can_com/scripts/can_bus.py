@@ -30,7 +30,7 @@ def topic_message_received(msg):
     try:
         can_bus.send(can_tx, timeout=0.001)
     except can.CanError as cerr:
-	print("CAN TIMEOUT")
+	    print("CAN TIMEOUT")
         pass
 
 
