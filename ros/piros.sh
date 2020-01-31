@@ -8,5 +8,5 @@ source ~/X11-Core/ros/devel/setup.bash
 
 # ./reset_can.py &
 
-roslaunch ~/X11-Core/ros/launch/run_rov.launch 
+roslaunch ~/X12-Core/ros/launch/run_rov.launch 
 # killall reset_can.py

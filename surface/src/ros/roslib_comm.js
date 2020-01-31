@@ -14,7 +14,7 @@ ros.on('error', function(error) {
 });
 
 ros.on('close', function() {
-    console.log('Connection to websocket server closed.');
+    console.log('Connection to websocket server closed. Fuck.');
 });
 
 
