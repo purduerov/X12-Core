@@ -99,7 +99,7 @@ if __name__ == "__main__":
                                  thrust_status_msg, queue_size=10)
 
     # define variable for class Complex to allow calculation of thruster pwm values
-    #c = Complex_1.Complex()
+    c = Complex_1.Complex()
     tm = thrust_mapping.ThrustMapper()
     desired_thrust_final = [0, 0, 0, 0, 0, 0]
 
