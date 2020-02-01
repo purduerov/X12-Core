@@ -4,10 +4,11 @@ import { ipcRenderer } from 'electron';
 
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
-import {Row, Col, Container, Button} from 'react-bootstrap';
+import {Row, Col, Container, Button, Card} from 'react-bootstrap';
 import Camera from '../../components/Camera/Camera.jsx';
 import CameraController from '../../components/Camera/CameraController.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
+import PHinfo from '../../components/PHinfo/PHinfo.jsx';
 import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
 
 
@@ -33,7 +34,8 @@ export default class Window1Layout extends Component {
 				<Titlebar title='Purdue ROV Primary Screen' />
 				<Row noGutters='true' style={{height: '94%'}}>
 					<Col style={{padding: '.5rem'}}>
-						<ControlColumn>		
+						<ControlColumn>	
+							<PHinfo ph={0} temp={0} />	
 						</ControlColumn>
 					</Col>
 					<Col xs={6}>
