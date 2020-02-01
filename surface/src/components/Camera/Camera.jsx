@@ -1,3 +1,4 @@
+/* eslint-env browser */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, Container } from 'react-bootstrap';
@@ -11,10 +12,30 @@ export default class Camera extends React.Component {
 
 		this.state = {
 			cameras: CameraConfig,
-			activeCamera: this.props.activeCamera,
+			activeCamera: 0,
 		};
 
 		this.handleClick = this.handleClick.bind(this);
+		this.handleKeyDown = this.handleKeyDown.bind(this);
+	}
+
+	componentWillMount() {
+		document.addEventListener('keydown', this.handleKeyDown);
+	}
+
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this.handleKeyDown);
+	}
+
+	handleKeyDown({ key }) {
+		key = parseInt(key);
+		console.log(`mom ${typeof key} ${key}`);
+		if ([1,2,3,4].includes(key)) {
+			console.log(this);
+			this.setState({
+				activeCamera: key - 1
+			});
+		}
 	}
 
 	handleClick(idx) {
@@ -24,6 +45,7 @@ export default class Camera extends React.Component {
 			});
 		};
 	}
+
 
 
 	render() {

@@ -18,21 +18,6 @@ let windows = [];
 app.on('ready', () => {
 	createWindow(windows, 0);
 	// createWindow(windows, 1);
-
-	// // setupGamepad();
-	// runGamepad();
-	const gamepad = spawn('python', [ './gamepad_test.py'], {
-		stdio: ['pipe', 'pipe', 'pipe']
-	});
-	
-	gamepad.on('exit', (err) => console.log('exit'));
-	
-	gamepad.stdout.pipe(JSONStream.parse())
-		.on('data', data => {
-			store.updateGamepadState(data);
-			console.log('got data');
-		});
-	store.on(GAMEPAD_STATE_UPDATED, data => console.log(data));
 	
 });
 
