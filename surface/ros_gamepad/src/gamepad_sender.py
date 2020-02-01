@@ -1,8 +1,11 @@
-# !/usr/bin/python3
-"""Simple gamepad/joystick test example."""
-
+#!/usr/bin/env python3
+# license removed for brevity
 from __future__ import print_function
 
+import rospy
+from std_msgs.msg import String
+import json
+#from shared_msgs.msg import controller_msg
 
 import inputs
 from time import time, sleep
@@ -55,7 +58,6 @@ STICK_RANGE = 32768
 PRINT = 'PRINT'
 SEND = 'SEND'
 stop_threads = False
-
 
 class GamepadTest(object):
     """Simple joystick test class."""
@@ -149,7 +151,6 @@ class GamepadTest(object):
                 # self.abs_state[abbv] = event.state
 
             return self.output_state(event.ev_type, abbv)
-            # chain return 
 
         else:
             if event.ev_type == 'Key':
@@ -172,7 +173,7 @@ class GamepadTest(object):
         if self.action == PRINT:
             self.print_state()
         elif self.action == SEND:
-            combined = {**self.abs_st3ate, **self.btn_state}
+            combined = {**self.abs_state, **self.btn_state}
             print(json.dumps(combined))
 
     def print_state(self):
@@ -194,25 +195,36 @@ class GamepadTest(object):
             if self.btn_state[abbv] != self.old_btn_state[abbv]:
                 self.do_action()
                 return True
-                # return combined
         else:
             if self.abs_state[abbv] != self.old_abs_state[abbv]:
                 self.do_action()
                 return True
-                # return combined
 
-def main():
-    """Process all events forever."""
+def talker():
+    pub = rospy.Publisher('chatter', String, queue_size=10)
+    rospy.init_node('gp_pub', anonymous=True)
     gptest = GamepadTest(action=SEND)
-    while 1:
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        #hello_str = "hello world %s" % rospy.get_time()
+        #rospy.loginfo(hello_str)
+        #pub.publish(hello_str)
+        #rate.sleep()
+
         try:
             events = gptest.gamepad.read()
         except EOFError:
             events = []
         for event in events:
             gptest.process_event(event)
-            
+    
+        stuff = gptest.btn_state
+        stuff.update(gptest.abs_state)
+        rospy.loginfo(stuff)
+        pub.publish(json.dumps(stuff))
 
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    try:
+        talker()
+    except rospy.ROSInterruptException:
+        pass
