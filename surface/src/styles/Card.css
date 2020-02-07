@@ -5,6 +5,7 @@
     width: inherit;
     border: 0.5px solid gray;
     padding: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .card-body-custom{

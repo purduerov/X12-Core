@@ -9,6 +9,7 @@ import Camera from '../../components/Camera/Camera.jsx';
 import CameraController from '../../components/Camera/CameraController.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
 import PHinfo from '../../components/PHinfo/PHinfo.jsx';
+import ThrusterCircle from '../../components/ThrusterCircle/ThrusterCircle.jsx';
 import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
 
 
@@ -35,7 +36,8 @@ export default class Window1Layout extends Component {
 				<Row noGutters='true' style={{height: '94%'}}>
 					<Col style={{padding: '.5rem'}}>
 						<ControlColumn>	
-							<PHinfo ph={0} temp={0} />	
+							<PHinfo ph={0} temp={0} />
+							<ThrusterCircle val={25}/>				
 						</ControlColumn>
 					</Col>
 					<Col xs={6}>
@@ -60,7 +62,9 @@ export default class Window1Layout extends Component {
 						</Row>
 					</Col>
 					<Col style={{padding: '.5rem'}}>
-						<ControlColumn/>
+						<ControlColumn>
+							<PHinfo ph={0} temp={0} />
+						</ControlColumn>
 					</Col>
 				</Row>
 			</Container>
