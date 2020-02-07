@@ -8,6 +8,6 @@
     color: white;
     font-family: "Comic Sans MS";
     padding: .5rem;
-    align-items: flex-start;
+    align-items: center;
     flex-wrap: wrap;
 }
