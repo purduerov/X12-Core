@@ -1,8 +1,21 @@
 .card-custom{
-    background-color: '#333333';
-    height: 'auto';
+    background-color: #333333;
+    text-align: center;
+    height: fit-content;
+    width: inherit;
+    border: 0.5px solid gray;
+    padding: 1rem;
 }
 
-.card-body{
-    background-color: '#333333';
+.card-body-custom{
+    text-align: left;
+    background-color: #333333;
+}
+
+.text-left{
+    float: left;
+}
+
+.text-right{
+    float: right;
 }
