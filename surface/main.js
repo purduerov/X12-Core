@@ -17,8 +17,7 @@ let windows = [];
 
 app.on('ready', () => {
 	createWindow(windows, 0);
-	// createWindow(windows, 1);
-	
+	createWindow(windows, 1);
 });
 
 app.on('window-all-closed', () => {

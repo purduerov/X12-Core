@@ -12,6 +12,7 @@ import PHinfo from '../../components/PHinfo/PHinfo.jsx';
 import ThrusterCircle from '../../components/ThrusterCircle/ThrusterCircle.jsx';
 import ExampleComponent from '../../components/ExampleComponent/ExampleComponent.jsx';
 import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
+import '../../styles/Window1.css'; 
 
 
 export default class Window1Layout extends Component {
@@ -32,38 +33,27 @@ export default class Window1Layout extends Component {
 	}
 	render() {
 		return (
-			<Container fluid style={{padding: '0'}}>
+			<Container fluid style={{padding: '0' , color:'white'}}>
 				<Titlebar title='Purdue ROV Primary Screen' />
-				<Row noGutters='true' style={{height: '94%'}}>
-					<Col style={{padding: '.5rem'}}>
-						<ControlColumn>	
-							<PHinfo ph={0} temp={0} />
-							<ThrusterCircle val={25}/>
-							<ExampleComponent></ExampleComponent>				
+				<Row className='camera-row custom-row'>
+					<Col className='camera-col'>
+						<ControlColumn>
+							
 						</ControlColumn>
 					</Col>
-					<Col xs={6}>
-						<Row noGutters='true' style={{height: '70%', padding: '.5rem'}}>
-							<Col>
-								<ControlColumn>
-									<Camera activeCamera={this.state.activeCamera}></Camera>
-								</ControlColumn>
-							</Col>
-						</Row>
-						<Row noGutters='true' style={{height: '30%'}}>
-							<Col style={{padding: '.5rem', maxWidth: '50%'}}>
-								<ControlColumn>
-									<Gamepad></Gamepad>
-								</ControlColumn>
-							</Col>
-							<Col style={{padding: '.5rem', maxWidth: '50%'}}>
-								<ControlColumn>
-									electron.remote example: { this.state.sampleRemoteUpdate }
-								</ControlColumn>
-							</Col>
-						</Row>
+				</Row>
+				<Row className='function-row custom-row'>
+					<Col className='side-col'>
+						<ControlColumn>
+							<PHinfo ph={0} temp={0} />
+						</ControlColumn>
 					</Col>
-					<Col style={{padding: '.5rem'}}>
+					<Col className='central-col'>
+						<ControlColumn>
+							<PHinfo ph={0} temp={0} />
+						</ControlColumn>
+					</Col>
+					<Col className='side-col'>
 						<ControlColumn>
 							<PHinfo ph={0} temp={0} />
 						</ControlColumn>
