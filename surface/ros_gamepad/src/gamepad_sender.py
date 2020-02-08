@@ -1,8 +1,11 @@
-# !/usr/bin/python3
-"""Simple gamepad/joystick test example."""
-
+#!/usr/bin/env python3
+# license removed for brevity
 from __future__ import print_function
 
+import rospy
+from std_msgs.msg import String
+import json
+#from shared_msgs.msg import controller_msg
 
 import inputs
 from time import time, sleep
@@ -56,17 +59,18 @@ PRINT = 'PRINT'
 SEND = 'SEND'
 stop_threads = False
 
-
 class GamepadTest(object):
     """Simple joystick test class."""
 
     def __init__(self, gamepad=None, abbrevs=EVENT_ABB, action=PRINT):
         self.action = action
+        self.print_thread = None
         self.btn_state = {}
         self.old_btn_state = {}
         self.abs_state = {}
         self.old_abs_state = {}
         self.lastprint = self.get_time()
+        self.finalprint = False
         self.abbrevs = dict(abbrevs)
         for key, value in self.abbrevs.items():
             if key.startswith('Absolute') and not 'DPAD' in value:
@@ -157,11 +161,14 @@ class GamepadTest(object):
                 self.abs_state[abbv] = self.correct_raw(event.state, abbv)
                 # self.abs_state[abbv] = event.state
 
-    def do_action(self, thread=False):
-        if thread:
-            sleep(UPDATE_INTERVAL/900)
-            if not self.interval_elapsed():
-                return
+    def do_action(self):
+        # if thread:
+        #     print('aaaaaaa')
+        #     while True:
+        #         if stop():
+        #             break
+        #         if get_time()
+        #         self.lastprint = self.get_time()
 
         if self.action == PRINT:
             self.print_state()
@@ -184,9 +191,6 @@ class GamepadTest(object):
 
     def output_state(self, ev_type, abbv):
         """Print out the output state."""
-        follow_up_print = threading.Thread(target=self.do_action, args=(True,))
-        follow_up_print.start()
-
         if ev_type == 'Key':
             if self.btn_state[abbv] != self.old_btn_state[abbv]:
                 self.do_action()
@@ -195,20 +199,32 @@ class GamepadTest(object):
             if self.abs_state[abbv] != self.old_abs_state[abbv]:
                 self.do_action()
                 return True
-        
 
+def talker():
+    pub = rospy.Publisher('chatter', String, queue_size=10)
+    rospy.init_node('gp_pub', anonymous=True)
+    gptest = GamepadTest(action=SEND)
+    rate = rospy.Rate(10) # 10hz
+    while not rospy.is_shutdown():
+        #hello_str = "hello world %s" % rospy.get_time()
+        #rospy.loginfo(hello_str)
+        #pub.publish(hello_str)
+        #rate.sleep()
 
-def main():
-    """Process all events forever."""
-    gptest = GamepadTest(action=PRINT)
-    while 1:
         try:
             events = gptest.gamepad.read()
         except EOFError:
             events = []
         for event in events:
             gptest.process_event(event)
+    
+        stuff = gptest.btn_state
+        stuff.update(gptest.abs_state)
+        rospy.loginfo(stuff)
+        pub.publish(json.dumps(stuff))
 
-
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    try:
+        talker()
+    except rospy.ROSInterruptException:
+        pass
