@@ -49,8 +49,9 @@ export default class Window1Layout extends Component {
 						</ControlColumn>
 					</Col>
 					<Col className='central-col'>
-						<ControlColumn>
-							<PHinfo ph={0} temp={0} />
+						<ControlColumn className='control-inline'>
+							<PHinfo className='card-custom-inline' ph={0} temp={0} />
+							<PHinfo className='card-custom-inline' ph={0} temp={0} />
 						</ControlColumn>
 					</Col>
 					<Col className='side-col'>

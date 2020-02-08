@@ -20,3 +20,7 @@
 .text-right{
     float: right;
 }
+
+.card-custom-inline:not(:last-child){
+    margin-right: 0.5rem;
+}

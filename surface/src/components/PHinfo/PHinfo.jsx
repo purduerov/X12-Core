@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import styles from './PHinfo.css';
 import {Card, Button, ListGroup} from 'react-bootstrap';
 import '../../styles/Card.css';
 import '../../styles/ListGroup.css';
@@ -19,14 +18,14 @@ export default class PHinfo extends Component {
 
     render() {
         return (
-            <Card className="card-custom">
+            <Card className={`card-custom ${this.props.className}`}>
                 <Card.Title>pH and Temperature</Card.Title>
                 <Card.Body className='card-body-custom'>
                     <ListGroup variant="flush" className='listgroup-custom'>
-                        <ListGroup.Item className="listgroup-item-custom">
+                        <ListGroup.Item className='listgroup-item-custom'>
                             pH:<span className='text-right'>{this.props.ph}</span>
                         </ListGroup.Item>
-                        <ListGroup.Item className="listgroup-item-custom">
+                        <ListGroup.Item className='listgroup-item-custom'>
                             Temperature:<span className='text-right'>{this.props.temp}</span>
                         </ListGroup.Item>
                     </ListGroup>

@@ -11,3 +11,9 @@
     align-items: center;
     flex-wrap: wrap;
 }
+
+.control-inline{
+    align-items: start;
+    flex-wrap: nowrap;
+    display: flex;
+}

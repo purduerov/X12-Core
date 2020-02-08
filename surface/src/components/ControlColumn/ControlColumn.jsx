@@ -9,7 +9,7 @@ class ControlColumn extends React.Component {
 
 	render() {
 		return (
-			<div className='control'>
+			<div className={`control ${this.props.className}`}>
 				{this.props.children}
 			</div>
 		);
