@@ -3,7 +3,8 @@ const EventEmitter = require('events');
 const {
 	STORE_UPDATED,
 	GAMEPAD_STATE_UPDATED,
-	GAMEPAD_BINDING_UPDATED
+	GAMEPAD_BINDING_UPDATED,
+	IMU_UPDATED
 } = require('../constants');
 const defaults = require('./store_defaults.json');
 
@@ -28,9 +29,20 @@ class Store extends EventEmitter {
 				this.emit(GAMEPAD_BINDING_UPDATED, this.data.gamepad.binding);
 				break;
 
+			case IMU_UPDATED:
+				this.emit(IMU_UPDATED, this.data.sensors.imu);
+				break;
+
 			default:
 				break;
 		}
+	}
+
+	updateImuState(newImustate) {
+		this.data.sensors.imu = newImustate;
+
+		this.fireUpdateEvents(IMU_UPDATED);
+
 	}
 
 	updateGamepadState(newGamepadState) {
