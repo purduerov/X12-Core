@@ -24,5 +24,20 @@
 			"LSX": 0,
 			"LSY": 0
 		}
+	},
+	"sensors": {
+		"imu": {
+			"orientation": {
+				"pitch": 0,
+				"roll": 0,
+				"yaw": 0
+			},
+			"acceleration": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			}
+		},
+		"depth": 0
 	}
 }
