@@ -5,7 +5,7 @@ from __future__ import print_function
 import rospy
 from std_msgs.msg import String
 import json
-#from shared_msgs.msg import controller_msg
+from shared_msgs.msg import controller_msg
 
 import inputs
 from time import time, sleep

@@ -1,17 +1,19 @@
 [
 	{
 		"name": "Camera 1",
-		"highres": "assets/images/X11.png",
-		"lowres": "assets/images/X11.png"
+		"highres": "http://192.168.1.2:8090/test.mjpg",
+		"lowres": "http://192.168.1.2:8090/test.mjpg",
+		"lowresother": "assets/images/X11.png"
 	},
 	{
 		"name": "Camera 2",
-		"highres": "assets/images/two.jpg",
-		"lowres": "assets/images/two.jpg"
+		"highres": "http://192.168.1.4:8090/test.mjpg",
+		"lowres": "http://192.168.1.4:8090/test.mjpg",
+		"lowresother": "assets/images/two.jpg"
 	},
 	{
 		"name": "Camera 3",
-		"highres": "assets/images/three.png",
+		"highres": "http://192.168.1.2:8090/test.mjpg",
 		"lowres": "assets/images/three.png"
 	},
 	{
