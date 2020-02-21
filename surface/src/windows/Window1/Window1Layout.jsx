@@ -13,6 +13,7 @@ import ThrusterCircle from '../../components/ThrusterCircle/ThrusterCircle.jsx';
 import ExampleComponent from '../../components/ExampleComponent/ExampleComponent.jsx';
 import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
 import '../../styles/Window1.css'; 
+import Dash from '../../components/DashDisplay/DashDisplay.jsx';
 
 
 export default class Window1Layout extends Component {
@@ -38,14 +39,14 @@ export default class Window1Layout extends Component {
 				<Row className='camera-row custom-row'>
 					<Col className='camera-col'>
 						<ControlColumn>
-							
+
 						</ControlColumn>
 					</Col>
 				</Row>
 				<Row className='function-row custom-row'>
 					<Col className='side-col'>
 						<ControlColumn>
-							<PHinfo ph={0} temp={0} />
+							<ExampleComponent />
 						</ControlColumn>
 					</Col>
 					<Col className='central-col'>
@@ -56,7 +57,26 @@ export default class Window1Layout extends Component {
 					</Col>
 					<Col className='side-col'>
 						<ControlColumn>
-							<PHinfo ph={0} temp={0} />
+							<Dash className='card-custom-inline' 
+								  name1="Acceleration"
+								  alabel1="Y:" alabel2="X:" alabel3="Z:"
+								  avalue1="0" avalue2="0" avalue3="0"
+
+								  name2="Gyro"
+								  glabel1="Y:" glabel2="X:" glabel3="Z:"
+								  gvalue1="0" gvalue2="0" gvalue3="0"
+ 
+								  name3="Euler"
+								  elabel1="Yaw:" elabel2="Roll:" elabel3="Pitch:"
+								  evalue1="0" evalue2="10000" evalue3="0"
+
+								  name4="Temperature"
+								  tvalue="0"
+ 
+								  name5="Linear Acceleration"
+								  llabel1="Y:" llabel2="X:" llabel3="Z:"
+								  lvalue1="0" lvalue2="0" lvalue3="0"
+							/>
 						</ControlColumn>
 					</Col>
 				</Row>

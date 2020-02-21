@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card, Button, ListGroup} from 'react-bootstrap';
 import '../../styles/Card.css'; //Overriding base card CSS
-import '../../styles/ListGroup.css'; //Same as above but for ListGroup
+import '../../styles/Listgroup.css'; //Same as above but for ListGroup
 
 /*
 
