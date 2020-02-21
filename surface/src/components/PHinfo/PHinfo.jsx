@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card, Button, ListGroup} from 'react-bootstrap';
 import '../../styles/Card.css';
-import '../../styles/ListGroup.css';
+import '../../styles/Listgroup.css';
 
 export default class PHinfo extends Component {
 	constructor(props) {
