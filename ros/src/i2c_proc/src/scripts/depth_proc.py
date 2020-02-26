@@ -4,12 +4,6 @@ import rospy
 from ms5837 import MS5837
 from std_msgs.msg import Float32
 
-
-def message_received(msg):
-    # This runs on a seperate thread from the pub
-    pass
-
-
 if __name__ == "__main__":
     rospy.init_node('depth_proc')
 
