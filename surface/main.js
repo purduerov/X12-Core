@@ -4,6 +4,8 @@ const {
 	activateReload,
 
 } = require('./src/electron');
+const depth = require('./src/electron/attachDepthNode.js');
+const imu = require('./src/electron/attachImuNode.js');
 
 const { WATCH_MODE } = require('./src/electron').config;
 
@@ -12,6 +14,8 @@ let windows = [];
 
 app.on('ready', () => {
 	createWindow(windows, 0);
+	imu();
+	depth();
 	// createWindow(windows, 1);
 });
 
