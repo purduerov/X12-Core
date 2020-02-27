@@ -37,8 +37,8 @@ THRUST_MIN = -5.2646999999999995
 THRUST_MAX = 6.0633750000000015
 
 # Center of mass coordinates relative to our measurement point
-COM_X = 0.056 * 0.0254
-COM_Y = -0.1256 * 0.0254
+COM_X = 0.0#0.056 * 0.0254
+COM_Y = 0.0#-0.1256 * 0.0254
 COM_Z = 5.198 * 0.0254
 
 # Thruster locations relative to the measurement point of the ROV.
@@ -138,11 +138,13 @@ class ThrustMapper():
 			##print('Thruster force iteration:')
 			##print(thrusterForceIteration)
 			additionalOutput = np.matmul(self.thrusterForceMap, thrusterForceIteration)
+			if np.linalg.norm(outputNeeded) < ZERO_ROUND_THRESHOLD:
+				break
 			##print(additionalOutput)
 			# If accurate additional force not possible, break
 			similarity = np.dot(np.transpose(outputNeeded), additionalOutput) \
 				     / (np.linalg.norm(outputNeeded) * np.linalg.norm(additionalOutput))
-			#print('Vector similarity: %f' % similarity)
+			#print('Vector similarity: %s' % str(similarity))
 			if similarity < SIMILARITY_MINIMUM:
 				break
 
@@ -213,9 +215,9 @@ class ThrustMapper():
 
 	# Blindly copied from Complex_1. Check these values at some point please
 	def thrustToPWM(self, thrustVal):
-		if thrustVal < 0:
+		if thrustVal < -ZERO_ROUND_THRESHOLD:
 		    pwm = 0.0021 * (thrustVal ** 3) + 0.0298 * (thrustVal ** 2) + 0.2426 * thrustVal - 0.0775
-		elif thrustVal > 0:
+		elif thrustVal > ZERO_ROUND_THRESHOLD:
 		    pwm = 0.0017 * (thrustVal ** 3) - 0.025 * (thrustVal ** 2) + 0.213 * thrustVal + 0.0675
 		else:
 		    # assume 0 even though dead band has range of pwm values
