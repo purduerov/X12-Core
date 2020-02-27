@@ -12,10 +12,17 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 from SocketServer import ThreadingMixIn
 import StringIO
 import time
+import atexit
 
 
-capture=None
+capture = None
+server = None
 face_cascade = cv2.CascadeClassifier('/home/ivan/ROV/X12-Core/surface/src/cv/haarcascade_frontalface_default.xml')
+
+def exit_handler():
+	capture.release()
+	server.socket.close()
+
 
 class StreamHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
@@ -52,14 +59,6 @@ class StreamHandler(BaseHTTPRequestHandler):
 				except KeyboardInterrupt:
 					break
 			return
-		if self.path.endswith('.html'):
-			self.send_response(200)
-			self.send_header('Content-type','text/html')
-			self.end_headers()
-			self.wfile.write('<html><head></head><body>')
-			self.wfile.write('<img src="http://127.0.0.1:8080/cam.mjpg"/>')
-			self.wfile.write('</body></html>')
-			return
 
 
 class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
@@ -67,8 +66,10 @@ class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
 
 def main():
 	global capture
-	capture = cv2.VideoCapture(0)
 	global img
+
+	atexit.register(exit_handler)
+	capture = cv2.VideoCapture('http://192.168.1.6:8090/test.mjpg')
 	try:
 		server = ThreadedHTTPServer(('localhost', 8080), StreamHandler)
 		print 'Camera Stream Started'

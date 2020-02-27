@@ -12,17 +12,18 @@ class Gamepad extends React.Component {
 			message: 'something',
 			status: 'Booting...',
 			calibrating: false
-		}
+		};
 
 		ipcRenderer.on(CALIBRATE_RECEIVE, (event, args) => {
 			this.setState({status: args});
 			if(args == 'Calibrating controller...') this.setState({calibrating: true});
 		});
 
-		ipcRenderer.on(STORE_UPDATED, (event, args) =>{
+		ipcRenderer.on(STORE_UPDATED, (event, args) => {
+			console.log(args);
 			let out = JSON.stringify(args.gamepad.state);
 			this.setState({message: out});
-		})
+		});
 	}
 
 	calibrateClick(){
