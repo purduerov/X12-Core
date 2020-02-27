@@ -1,0 +1,8 @@
+prefix=/home/eric/Desktop/ROV/X12-Core/surface/src/ros/install
+
+Name: ros_gamepad
+Description: Description of ros_gamepad
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/eric/Desktop/ROV/X12-Core/surface/src/ros/install/lib 
+Requires: 

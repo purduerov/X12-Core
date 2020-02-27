@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/eric/Desktop/ROV/X12-Core/surface/devel -DCMAKE_INSTALL_PREFIX=/home/eric/Desktop/ROV/X12-Core/surface/install -G Unix Makefiles
