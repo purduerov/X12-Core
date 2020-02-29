@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "webpack-start": "webpack-dev-server --open --hot --mode development",
-    "webpack-build": "webpack --mode production",
+    "webpack-build": "webpack --mode development",
     "webpack-watch": "webpack -w --mode development",
     "electron": "electron .",
     "electron-watch": "NODE_ENV=WATCH electron .",

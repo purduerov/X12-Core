@@ -21,7 +21,27 @@ export default class Window1Layout extends Component {
 		super(props);
 		this.state = {
 			activeCamera: 0,
-			sampleRemoteUpdate: 0
+			sampleRemoteUpdate: 0,
+			imuData: {
+				Acceleration: {
+					x: 2000,
+					y: 1,
+					z: 2
+				},
+				Gyro: {
+					x: 2,
+					y: 5,
+					z: 1
+				},
+				Euler: {
+					x: 5,
+					y: 3,
+					z: 9
+				},
+				Temperature: {
+					temp: 30
+				}
+			}
 		};
 
 		this.changeCamera = this.changeCamera.bind(this);
@@ -58,24 +78,7 @@ export default class Window1Layout extends Component {
 					<Col className='side-col'>
 						<ControlColumn>
 							<Dash className='card-custom-inline' 
-								  name1="Acceleration"
-								  alabel1="Y:" alabel2="X:" alabel3="Z:"
-								  avalue1="0" avalue2="0" avalue3="0"
-
-								  name2="Gyro"
-								  glabel1="Y:" glabel2="X:" glabel3="Z:"
-								  gvalue1="0" gvalue2="0" gvalue3="0"
- 
-								  name3="Euler"
-								  elabel1="Yaw:" elabel2="Roll:" elabel3="Pitch:"
-								  evalue1="0" evalue2="10000" evalue3="0"
-
-								  name4="Temperature"
-								  tvalue="0"
- 
-								  name5="Linear Acceleration"
-								  llabel1="Y:" llabel2="X:" llabel3="Z:"
-								  lvalue1="0" lvalue2="0" lvalue3="0"
+								data={this.state.imuData}	
 							/>
 						</ControlColumn>
 					</Col>
