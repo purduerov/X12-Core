@@ -1,0 +1,8 @@
+prefix=/home/eric/Desktop/ROV/X12-Core/surface/src/ros/install
+
+Name: shared_msgs
+Description: Description of shared_msgs
+Version: 0.0.0
+Cflags: -I/home/eric/Desktop/ROV/X12-Core/surface/src/ros/install/include
+Libs: -L/home/eric/Desktop/ROV/X12-Core/surface/src/ros/install/lib 
+Requires: 

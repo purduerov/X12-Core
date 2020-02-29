@@ -5,6 +5,7 @@ from sensor_msgs.msg import Imu
 from std_msgs.msg import Float32
 import numpy as np
 import Complex_1
+import thrust_mapping
 
 desired_p = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 desired_p_unramped = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -50,7 +51,8 @@ def on_loop():
         desired_thrust_final[i] = desired_p[i]
 
     # calculate thrust
-    pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
+    #pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
+    pwm_values = tm.thrustVectorToPWM(tm.calculateThrusterOutput(desired_thrust_final))
     # invert relevant values
     # for i in range(8):
     #   if inverted_list[i] == 1:
@@ -66,7 +68,7 @@ def on_loop():
     tcm.hbr = int((pwm_values[2] + 1) * 127.5)
     tcm.hbl = int((pwm_values[3] + 1) * 127.5)
     tcm.vfl = int((pwm_values[4] + 1) * 127.5)
-    tcm.vfr = int((pwm_values[5] + 1) * 127.5)
+    tcm.vfr = int((-pwm_values[5] + 1) * 127.5)
     tcm.vbr = int((pwm_values[6] + 1) * 127.5)
     tcm.vbl = int((pwm_values[7] + 1) * 127.5)
 
@@ -78,28 +80,30 @@ def on_loop():
 
 
 if __name__ == "__main__":
-  '''
-  Note that this file is only set up for using 8 thrusters.
-  '''
+    '''
+    Note that this file is only set up for using 8 thrusters.
+    '''
 
-  #initialize node and rate
-  rospy.init_node('thrust_control')
-  rate = rospy.Rate(50) #50 hz
+    # initialize node and rate
+    rospy.init_node('thrust_control')
+    rate = rospy.Rate(50)  # 20 hz
 
-  #initialize subscribers
-  comm_sub = rospy.Subscriber('/thrust_command', thrust_command_msg, _pilot_command)
-  #controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
-  #controller_sub = rospy.Subscriber('/downstream_data',controller_msg, _teleop)
-  #initialize publishers
-  thrust_pub = rospy.Publisher('final_thrust',
-      final_thrust_msg, queue_size=10)
-  status_pub = rospy.Publisher('thrust_status',
-      thrust_status_msg, queue_size=10)
+    # initialize subscribers
+    comm_sub = rospy.Subscriber('/thrust_command', thrust_command_msg, _pilot_command)
+    # controller_sub = rospy.Subscriber('/surface/controller',controller_msg, _teleop)
+    #controller_sub = rospy.Subscriber('gamepad_listener', controller_msg, _teleop)
+    # initialize publishers
+    thrust_pub = rospy.Publisher('final_thrust',
+                                 final_thrust_msg, queue_size=10)
+    status_pub = rospy.Publisher('thrust_status',
+                                 thrust_status_msg, queue_size=10)
 
-  #define variable for class Complex to allow calculation of thruster pwm values
-  c = Complex_1.Complex()
-  desired_thrust_final = [0, 0, 0, 0, 0, 0]
+    # define variable for class Complex to allow calculation of thruster pwm values
+    c = Complex_1.Complex()
+    tm = thrust_mapping.ThrustMapper()
+    desired_thrust_final = [0, 0, 0, 0, 0, 0]
 
-  while not rospy.is_shutdown():
-    on_loop()
-    rate.sleep()
+    while not rospy.is_shutdown():
+        on_loop()
+        rate.sleep()
+

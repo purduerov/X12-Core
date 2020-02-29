@@ -10,7 +10,7 @@ can_ids = [0x201, 0x201, 0x203, 0x202, 0x202, 0x203, 0x203, 0x202]  # can IDs
 can_pos = [5, 6, 7, 5, 6, 4, 5, 7]  # positions in data packet
 
 can_better_map = {
-    0x201: [None, 0, 1, None],
+    0x201: [1, 0, None, None],
     0x202: [None, 3, 4, 7],
     0x203: [5, 6, None, 2]
 }

@@ -1,0 +1,42 @@
+{
+	"gamepad": {
+		"state": {
+			"X": 0,
+			"Y": 0,
+			"A": 0,
+			"B": 0,
+			"RB": 0,
+			"LB": 0,
+			"RSZ": 0,
+			"LSZ": 0,
+			"XBOX": 0,
+			"MENU": 0,
+			"START": 0,
+			"DPADR": 0,
+			"DPADL": 0,
+			"DPADTOP": 0,
+			"DPADBTM": 0,
+			"RT": 0,
+			"LT": 0,
+			"RSX": 0,
+			"RSY": 0,
+			"LSX": 0,
+			"LSY": 0
+		}
+	},
+	"sensors": {
+		"imu": {
+			"orientation": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			},
+			"acceleration": {
+				"x": 0,
+				"y": 0,
+				"z": 0
+			}
+		},
+		"depth": 0
+	}
+}
