@@ -1,7 +1,7 @@
 #! /usr/bin/python
 import rospy
 # import ms5837
-from ms5837 import MS5837
+import MS5837
 from std_msgs.msg import Float32
 
 if __name__ == "__main__":
