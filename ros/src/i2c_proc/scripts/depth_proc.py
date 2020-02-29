@@ -22,7 +22,7 @@ if __name__ == "__main__":
         pass
 
     pub = rospy.Publisher('depth',
-                          Float32, queue_size=10)
+                          Float32, queue_size=10);
 
     rate = rospy.Rate(10)  # 10hz
     # TODO: I2C related activities
