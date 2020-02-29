@@ -22,7 +22,7 @@ if __name__ == "__main__":
     # TODO: I2C related activities
     while not rospy.is_shutdown():
        try:	
-	       depth_sensor.read() #allows the sensor to read new data
+           depth_sensor.read() #allows the sensor to read new data
            depth = depth_sensor.depth()
 	 
        except:
