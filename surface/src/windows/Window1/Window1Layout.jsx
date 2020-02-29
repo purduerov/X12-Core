@@ -4,11 +4,15 @@ import { ipcRenderer } from 'electron';
 
 import Titlebar from '../../components/Titlebar/Titlebar.jsx';
 import ControlColumn from '../../components/ControlColumn/ControlColumn.jsx';
-import { Row, Col, Container, Button } from 'react-bootstrap';
+import {Row, Col, Container, Button, Card} from 'react-bootstrap';
 import Camera from '../../components/Camera/Camera.jsx';
 import CameraController from '../../components/Camera/CameraController.jsx';
 import Gamepad from '../../components/Gamepad/Gamepad.jsx';
+import PHinfo from '../../components/PHinfo/PHinfo.jsx';
+import ThrusterCircle from '../../components/ThrusterCircle/ThrusterCircle.jsx';
+import ExampleComponent from '../../components/ExampleComponent/ExampleComponent.jsx';
 import { STORE_UPDATED, SAMPLE_UPDATE } from '../../constants';
+import '../../styles/Window1.css'; 
 
 
 export default class Window1Layout extends Component {
@@ -21,36 +25,31 @@ export default class Window1Layout extends Component {
 
 	render() {
 		return (
-			<Container fluid style={{ padding: '0' }}>
+			<Container fluid style={{padding: '0' , color:'white'}}>
 				<Titlebar title='Purdue ROV Primary Screen' />
-				<Row noGutters='true' style={{ height: '94%' }}>
-					<Col style={{ padding: '.5rem' }}>
+				<Row className='camera-row custom-row'>
+					<Col className='camera-col'>
 						<ControlColumn>
+							
 						</ControlColumn>
 					</Col>
-					<Col xs={6}>
-						<Row noGutters='true' style={{ height: '70%', padding: '.5rem' }}>
-							<Col>
-								<ControlColumn>
-									<Camera />
-								</ControlColumn>
-							</Col>
-						</Row>
-						<Row noGutters='true' style={{ height: '30%' }}>
-							<Col style={{ padding: '.5rem', maxWidth: '50%' }}>
-								<ControlColumn>
-									<Gamepad></Gamepad>
-								</ControlColumn>
-							</Col>
-							<Col style={{ padding: '.5rem', maxWidth: '50%' }}>
-								<ControlColumn>
-									electron.remote example: {this.state.sampleRemoteUpdate}
-								</ControlColumn>
-							</Col>
-						</Row>
+				</Row>
+				<Row className='function-row custom-row'>
+					<Col className='side-col'>
+						<ControlColumn>
+							<PHinfo ph={0} temp={0} />
+						</ControlColumn>
 					</Col>
-					<Col style={{ padding: '.5rem' }}>
-						<ControlColumn />
+					<Col className='central-col'>
+						<ControlColumn className='control-inline'>
+							<PHinfo className='card-custom-inline' ph={0} temp={0} />
+							<PHinfo className='card-custom-inline' ph={0} temp={0} />
+						</ControlColumn>
+					</Col>
+					<Col className='side-col'>
+						<ControlColumn>
+							<PHinfo ph={0} temp={0} />
+						</ControlColumn>
 					</Col>
 				</Row>
 			</Container>

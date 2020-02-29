@@ -1,0 +1,26 @@
+.card-custom{
+    background-color: #333333;
+    text-align: center;
+    height: fit-content;
+    width: inherit;
+    border: 0.5px solid gray;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.card-body-custom{
+    text-align: left;
+    background-color: #333333;
+}
+
+.text-left{
+    float: left;
+}
+
+.text-right{
+    float: right;
+}
+
+.card-custom-inline:not(:last-child){
+    margin-right: 0.5rem;
+}

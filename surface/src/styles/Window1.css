@@ -1,0 +1,25 @@
+.camera-row{
+    height: 60%;
+}
+
+.function-row{
+    height: 34%;
+}
+
+.side-col{
+    padding: .5rem;
+}
+
+.central-col{
+    min-width: 50%;
+    padding: .5rem;
+}
+
+.camera-col{
+    padding: .5rem;
+}
+
+.custom-row{
+    margin-left: 0rem;
+    margin-right: 0rem;
+}

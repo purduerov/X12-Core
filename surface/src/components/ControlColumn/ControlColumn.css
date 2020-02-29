@@ -3,10 +3,17 @@
     width: 100%;
     background-color: #333333;
     border-radius: 10px;
-    /*border: 1px solid black;*/
+    border: 0.5px solid gray;
+    overflow: auto;
     color: white;
     font-family: "Comic Sans MS";
     padding: .5rem;
-    display: flex;
     align-items: center;
+    flex-wrap: wrap;
+}
+
+.control-inline{
+    align-items: start;
+    flex-wrap: nowrap;
+    display: flex;
 }
