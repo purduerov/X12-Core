@@ -11,7 +11,7 @@ def talker():
     while not rospy.is_shutdown():
         if i%2 == 0:
             angle = 30.0
-            print(type(angle))
+            print(angle)
             pub.publish(angle)
         else:
             angle = 120.0
