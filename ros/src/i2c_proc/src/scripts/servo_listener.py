@@ -7,8 +7,8 @@ from time import sleep #imports sleep (aka waiting or pause) into the program
 #Setting a Pin Mode
 GPIO.setmode(GPIO.BOARD) #Chose Board pin number scheme
 #Set up pin 11 for PWM
-GPIO.setup(17, GPIO.OUT) #sets up pin 11 to an output
-p = GPIO.PWM(17,50) #sets up pin 11 as a PWM pin(50 is the frequency)
+GPIO.setup(11, GPIO.OUT) #sets up pin 11 to an output
+p = GPIO.PWM(11,50) #sets up pin 11 as a PWM pin(50 is the frequency)
 p.start(0) #starts running PWM on the pin and sets it to 0
 
 def callback(data):
