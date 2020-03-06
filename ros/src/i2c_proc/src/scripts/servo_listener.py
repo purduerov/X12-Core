@@ -13,7 +13,10 @@ p.start(0) #starts running PWM on the pin and sets it to 0
 
 def callback(data):
     duty = data.data/18 + 2.5 #change the angle to desired duty cycle
-    p.ChangeDutyCycle(duty) 
+    try:
+        p.ChangeDutyCycle(duty) 
+    except(err):
+        print(err)
 
 def listener():
     rospy.init_node('listener', anonymous=True)
