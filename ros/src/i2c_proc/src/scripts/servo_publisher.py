@@ -6,7 +6,7 @@ from std_msgs.msg import Float32
 def talker():
     rospy.init_node('dummy', anonymous=True)
     pub = rospy.Publisher('chatter', Float32, queue_size=10)
-    rate = rospy.Rate(0.5)
+    rate = rospy.Rate(0.05)
     i = 0
     while not rospy.is_shutdown():
         if i%2 == 0:
