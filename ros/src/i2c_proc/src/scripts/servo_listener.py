@@ -12,7 +12,7 @@ p = GPIO.PWM(11,50) #sets up pin 11 as a PWM pin(50 is the frequency)
 p.start(0) #starts running PWM on the pin and sets it to 0
 
 def callback(data):
-    duty = data/18 + 2.5 #change the angle to desired duty cycle
+    duty = float(data)/18 + 2.5 #change the angle to desired duty cycle
     p.ChangeDutyCycle(duty) 
 
 def listener():
