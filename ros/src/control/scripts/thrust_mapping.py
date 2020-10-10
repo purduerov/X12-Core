@@ -39,18 +39,18 @@ THRUST_MAX = 6.0633750000000015
 # Center of mass coordinates relative to our measurement point
 COM_X = 0.0#0.056 * 0.0254
 COM_Y = 0.0#-0.1256 * 0.0254
-COM_Z = 5.198 * 0.0254
+COM_Z = 0.0 * 0.0254
 
 # Thruster locations relative to the measurement point of the ROV.
 #				X	Y	Z
-location = np.matrix([	[	6.75,	-6.25,	5.58], # Thruster 1
-			[	6.75,	6.25,	5.58], # Thruster 2
-			[	-6.75,	6.25,	5.58], # Thruster 3
-			[	-6.75,	-6.25,	5.58], # Thruster 4
-			[	4,	-7,	12.45], # Thruster 5
-			[	4,	7,	12.45], # Thruster 6
-			[	-4,	7,	12.45], # Thruster 7
-			[	-4,	-7,	12.45]]) # Thruster 8
+location = np.matrix([	[	4.437,	5.679,	0], # Thruster 1
+			[	-4.437,	5.679,	0], # Thruster 2
+			[	-4.437,	-5.679,	0], # Thruster 3
+			[	4.437,	-5.679,	0], # Thruster 4
+			[	7.5,	7.312,	2.25], # Thruster 5
+			[	-7.5,	7.312,	2.25], # Thruster 6
+			[	-7.5,	-7.312,	2.25], # Thruster 7
+			[	7.5,	-7.312,	2.25]]) # Thruster 8
 location *=  0.0254
 
 # Directions the thrust forces point. MUST BE UNIT VECTORS.
@@ -61,14 +61,14 @@ XCOMP = np.sin(7 * np.pi / 18)
 YCOMP = np.cos(7 * np.pi / 18)
 
 #				X	Y	Z
-direction = np.matrix([	[	XCOMP,	YCOMP,	0], # Thruster 1
-			[	XCOMP,	-YCOMP,	0], # Thruster 2
-			[	-XCOMP,	-YCOMP,	0], # Thruster 3
-			[	-XCOMP,	YCOMP,	0], # Thruster 4
-			[	0,	0,	1], # Thruster 5
-			[	0,	0,	1], # Thruster 6
-			[	0,	0,	1], # Thruster 7
-			[	0,	0,	1]]) # Thruster 8
+direction = np.matrix([	[	0,	0,	-1], # Thruster 1
+			[	0,	0,	1], # Thruster 2
+			[	0,	0,	1], # Thruster 3
+			[	0,	0,	1], # Thruster 4
+			[	-XCOMP,	YCOMP,	0], # Thruster 5
+			[	XCOMP,	YCOMP,	0], # Thruster 6
+			[	XCOMP,	-YCOMP,	0], # Thruster 7
+			[	-XCOMP,	-YCOMP,	0]]) # Thruster 8
 
 # Assert all direction vectors are unit vectors (+- 1% for rounding)
 for vector in direction:

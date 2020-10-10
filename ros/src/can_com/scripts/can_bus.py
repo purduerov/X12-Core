@@ -31,7 +31,7 @@ def topic_message_received(msg):
         can_bus.send(can_tx, timeout=0.001)
     except can.CanError as cerr:
 	    print("CAN TIMEOUT")
-        pass
+            pass
 
 
 # Publisher: Called when can bus message is received

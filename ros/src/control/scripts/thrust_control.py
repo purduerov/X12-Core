@@ -12,7 +12,7 @@ desired_p_unramped = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 locked_dims_list = [False, False, False, False, False, False]
 disabled_list = [False, False, False, False, False, False, False, False]
 inverted_list = [0, 0, 0, 0, 0, 0, 0, 0]
-MAX_CHANGE = .03
+MAX_CHANGE = 10000
 # watch dog stuff
 last_packet_time = 0.0
 is_timed_out = False
@@ -54,9 +54,9 @@ def on_loop():
     #pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
     pwm_values = tm.thrustVectorToPWM(tm.calculateThrusterOutput(desired_thrust_final))
     # invert relevant values
-    # for i in range(8):
-    #   if inverted_list[i] == 1:
-    #     pwm_values[i] = pwm_values[i] * (-1)
+    #for i in range(8):
+    #    if inverted_list[i] == 1:
+    #        pwm_values[i] = pwm_values[i] * (-1)
 
     # assign values to publisher messages for thurst control and status
     tcm = final_thrust_msg()
@@ -68,7 +68,7 @@ def on_loop():
     tcm.hbr = int((pwm_values[2] + 1) * 127.5)
     tcm.hbl = int((pwm_values[3] + 1) * 127.5)
     tcm.vfl = int((pwm_values[4] + 1) * 127.5)
-    tcm.vfr = int((-pwm_values[5] + 1) * 127.5)
+    tcm.vfr = int((-1.0*pwm_values[5] + 1) * 127.5)
     tcm.vbr = int((pwm_values[6] + 1) * 127.5)
     tcm.vbl = int((pwm_values[7] + 1) * 127.5)
 
