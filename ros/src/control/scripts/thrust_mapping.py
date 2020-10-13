@@ -1,12 +1,13 @@
 from numpy import linalg
 import numpy as np
 
-# Measurements ripped from Complex_1.py. We'll probably need to remeasure and calibrate a lot of these,
-# then this comment should be updated describing our process and where all the numbers came from.
+# Updated: 10/13/2020
+# Measurments taken from https://docs.google.com/spreadsheets/d/1yDluqZhArekSV40zqgDq0e59gslUBoPvrR4V29pGhZE/edit#gid=0
+# 
 #
 # All measurements are based on:
-#	X: LEFT/RIGHT MOTION OF THE ROV. LEFT = +X
-#	Y: FORWARD/BACK. FORWARD = +Y = SIDE THE ROV CLAW IS ON
+#	X: FORWARD/BACK. FORWARD = +X = SIDE THE ROV PM IS ON
+#	Y: LEFT/RIGHT MOTION OF THE ROV. LEFT = +Y
 #	Z: UP/DOWN. UP = +Z
 #
 #	PITCH: TILT FORWARD/BACK. +PITCH TILTS FORWARD (LOOK DOWN). USE RIGHT HAND RULE ON X AXIS.
@@ -32,25 +33,26 @@ SIMILARITY_MINIMUM = .9
 PERCENT_DESIRED_FORCE_YIELDED = .95
 # Values beneath this are assumed to be zero because of double rounding
 ZERO_ROUND_THRESHOLD = .0001
-# Thruster thrust limits. THRUST_MIN is max reverse thrust
-THRUST_MIN = -5.2646999999999995
-THRUST_MAX = 6.0633750000000015
+# Thruster thrust limits in kg*feet. THRUST_MIN is max reverse thrust
+THRUST_MIN = -2.9
+THRUST_MAX = 3.71
 
 # Center of mass coordinates relative to our measurement point
 COM_X = 0.0#0.056 * 0.0254
 COM_Y = 0.0#-0.1256 * 0.0254
 COM_Z = 0.0 * 0.0254
 
-# Thruster locations relative to the measurement point of the ROV.
+# Thruster locations relative to the measurement point of the ROV measured in inches.
+# the measurment point is the center point that sits flush on the bottom of the power box
 #				X	Y	Z
 location = np.matrix([	[	4.437,	5.679,	0], # Thruster 1
 			[	-4.437,	5.679,	0], # Thruster 2
 			[	-4.437,	-5.679,	0], # Thruster 3
 			[	4.437,	-5.679,	0], # Thruster 4
-			[	7.5,	7.312,	2.25], # Thruster 5
-			[	-7.5,	7.312,	2.25], # Thruster 6
-			[	-7.5,	-7.312,	2.25], # Thruster 7
-			[	7.5,	-7.312,	2.25]]) # Thruster 8
+			[	7.5,	7.312,	-2.25], # Thruster 5
+			[	-7.5,	7.312,	-2.25], # Thruster 6
+			[	-7.5,	-7.312,	-2.25], # Thruster 7
+			[	7.5,	-7.312,	-2.25]]) # Thruster 8
 location *=  0.0254
 
 # Directions the thrust forces point. MUST BE UNIT VECTORS.
