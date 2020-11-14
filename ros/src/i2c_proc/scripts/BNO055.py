@@ -145,7 +145,7 @@ if __name__ == '__main__':
 
         # We must initialize the sensor before reading it
         if not sensor:
-            print "Sensor could not be initialized"
+            print ("Sensor could not be initialized")
             exit(1)
 
         # print("Pressure: %.2f mbar") % (sensor.pressure())
@@ -177,7 +177,7 @@ if __name__ == '__main__':
 
                 time.sleep(0.005)
             else:
-                print "Sensor read failed!"
+                print ("Sensor read failed!")
                 exit(1)
 
 

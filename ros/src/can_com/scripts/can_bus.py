@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 import sys
 import can
 import rospy
@@ -30,8 +30,8 @@ def topic_message_received(msg):
     try:
         can_bus.send(can_tx, timeout=0.001)
     except can.CanError as cerr:
-	    print("CAN TIMEOUT")
-            pass
+      print("CAN TIMEOUT")
+      pass
 
 
 # Publisher: Called when can bus message is received
@@ -39,7 +39,7 @@ def bus_message_received(can_rx):
     global can_bus
     global pub
     data_list = list(can_rx.data)
-    data = 0l
+    data = 0
     shift = len(data_list) * 8
     for i in data_list:
         shift -= 8

@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 import rospy
 import smbus
 import math
@@ -51,7 +51,7 @@ def reset_imu_offsets():
     global IMU_PITCH_OFFSET
     global IMU_ROLL_OFFSET
     global IMU_YAW_OFFSET
-    print "message recieved"
+    print ("message recieved")
     IMU_PITCH_OFFSET = imu.pitch();
     IMU_ROLL_OFFSET = imu.roll();
     IMU_YAW_OFFSET = imu.yaw();

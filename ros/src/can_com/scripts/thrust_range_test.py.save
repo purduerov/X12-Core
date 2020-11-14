@@ -16,14 +16,14 @@ def getSignal(bus):
     return signal_handler
 
 
-def zeroOutThrusters(bus=None):
+def zeroOutThrusters(bus=0):
     a = mapThrusters([127] * 8)
 
     writeToCan(a, timesleep=0.0, bus=bus, printOut=True)
 
 
-def mapThrusters(can_pow, can_map=None, printOut=False):
-    if can_map is None:
+def mapThrusters(can_pow, can_map=0, printOut=False):
+    if can_map is :
         can_map = {
             0x201: [7, 0, 0, 0],
             0x202: [0, 4, 5, 6],
