@@ -63,7 +63,7 @@ def writeToCan(packet, timesleep=1, bus=None, printOut=False):
 
         can_tx = can.Message(arbitration_id=cid, data=data, extended_id=False)
 
-        bus.send(can_tx, timeout=0.001)
+        bus.send(can_tx, timeout=1)
 
         if printOut:
             tst = "    {}:".format(cid)
@@ -104,5 +104,5 @@ def mainLoop(timesleep=1, bound=5, increment=1, mid=127, channel='can0', bustype
 
 if __name__ == "__main__":
     bound = 10 * 10
-    inc = 1
+    inc = 8
     print(mainLoop(bound=bound, increment=inc, timesleep=.04))

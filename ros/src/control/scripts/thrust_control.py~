@@ -7,13 +7,12 @@ import numpy as np
 import Complex_1
 import thrust_mapping
 
-desired_p = [0.0,0.0,0.0,0.0,0.0,0.0]
-desired_thrusters = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0,0.0,0.0]
-desired_p_unramped = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+desired_p = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+desired_p_unramped = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 locked_dims_list = [False, False, False, False, False, False]
 disabled_list = [False, False, False, False, False, False, False, False]
 inverted_list = [0, 0, 0, 0, 0, 0, 0, 0]
-MAX_CHANGE = .03
+MAX_CHANGE = .1
 # watch dog stuff
 last_packet_time = 0.0
 is_timed_out = False
@@ -26,49 +25,45 @@ def _pilot_command(comm):
     global disabled_list  # disabled thrusters
     global inverted_list  # inverted thrusters
     global desired_p_unramped
-    print (comm.desired_thrust)
-    desired_p = comm.desired_thrust
+    print ('new_pilot_data')
+    desired_p_unramped = comm.desired_thrust
     # disabled_list = comm.disable_thrusters
     # inverted_list = comm.inverted
 
 
 def ramp(index):
-    if (abs(desired_p_unramped[index] - desired_thrusters[index]) > MAX_CHANGE):
-        if (desired_p_unramped[index] - desired_thrusters[index] > 0):
-            desired_thrusters[index] += MAX_CHANGE
+    if (abs(desired_p_unramped[index] - desired_p[index]) > MAX_CHANGE):
+        if (desired_p_unramped[index] - desired_p[index] > 0):
+            desired_p[index] += MAX_CHANGE
         else:
-            desired_thrusters[index] -= MAX_CHANGE
+            desired_p[index] -= MAX_CHANGE
         return
     else:
-        desired_thrusters[index] = desired_p_unramped[index]
+        desired_p[index] = desired_p_unramped[index]
 
 
 def on_loop():
     global new_auto_data
     global is_timed_out
     global last_packet_time
-    global desired_thrusters
-    global desired_p_unramped
     for i in range(0, 6):
+        ramp(i)
         desired_thrust_final[i] = desired_p[i]
 
     # calculate thrust
     #pwm_values = c.calculate(desired_thrust_final, disabled_list, False)
-    desired_p_unramped = tm.thrustVectorToPWM(tm.calculateThrusterOutput(desired_thrust_final))
+    pwm_values = tm.thrustVectorToPWM(tm.calculateThrusterOutput(desired_thrust_final))
     # invert relevant values
     #for i in range(8):
     #    if inverted_list[i] == 1:
     #        pwm_values[i] = pwm_values[i] * (-1)
-    for i in range(0,8):
-        ramp(i)
-    pwm_values = desired_thrusters
-    print(desired_p_unramped)
+
     # assign values to publisher messages for thurst control and status
     tcm = final_thrust_msg()
     # val = float of range(-1, 1)
     # if int8: (val * 127.5) - 0.5 will give range -128 to 127
     # if uint8: (val + 1) * 127.5 will give 0 to 255
-    tcm.hfl = int((-1.0*pwm_values[0] + 1) * 127.5)
+    tcm.hfl = int((pwm_values[0] + 1) * 127.5)
     tcm.hfr = int((pwm_values[1] + 1) * 127.5)
     tcm.hbr = int((pwm_values[2] + 1) * 127.5)
     tcm.hbl = int((pwm_values[3] + 1) * 127.5)

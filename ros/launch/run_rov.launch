@@ -7,7 +7,7 @@
         <node name="imu" pkg="i2c_proc" type="imu_proc.py"/>
 	<node name="i2c_com" pkg="i2c_com" type="i2c.py"/>
         <node name="thrust_control" pkg="control" type="thrust_control.py"/>
-	
+		
     </group>
 
 </launch>
